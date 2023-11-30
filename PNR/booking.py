@@ -39,3 +39,6 @@ class Booking:
         self.arr_dtml: str = arr_dtml
         self.dep_dtmz: str = dep_dtmz
         self.arr_dtmz: str = arr_dtmz
+
+    def __repr__(self) -> str:
+        return f"Booking({self.__dict__})"
