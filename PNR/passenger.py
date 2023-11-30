@@ -1,3 +1,8 @@
+'''
+This file contains the class for PNR passenger data.
+'''
+
+
 class Passenger:
 
     def __init__(
