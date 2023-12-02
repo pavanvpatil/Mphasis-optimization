@@ -20,7 +20,7 @@ def get_affected_pnrs(InventoryId) -> dict:
     carrier_code = schedule_dict[sched_id].CarrierCode
     pnr_booking = get_pnr_booking_input()
     for currBooking in pnr_booking:
-        if (pnr_booking[currBooking].carrier_cd == carrier_code and pnr_booking[currBooking].flt_num == fno):
+        if pnr_booking[currBooking].carrier_cd == carrier_code and pnr_booking[currBooking].flt_num == fno:
             affected_pnrs[currBooking] = pnr_booking[currBooking]
     return affected_pnrs
 
