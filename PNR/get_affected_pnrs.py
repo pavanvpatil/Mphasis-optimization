@@ -10,7 +10,7 @@ import PNR.pnr_input
 def get_affected_pnrs(InventoryId) -> dict:
     #gets all affected pnr bookings with inventory id and returns a dict with RECLOC:CARRIER_CD:FLT_NO as key and object of booking class as value
     #it checks flt_number and carrier_cd
-    #InventoryId is the inventoryid of canceled flight
+    #InventoryId is the InventoryId of canceled flight
 
     inventory_dict = get_inventory()
     schedule_dict = get_schedule()
