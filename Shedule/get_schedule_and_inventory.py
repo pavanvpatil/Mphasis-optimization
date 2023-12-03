@@ -14,6 +14,9 @@ def get_schedule() -> dict:
     #this parses the shedule sheet and returns a dict with ScheduleId as the key
     shedule_df = read_csv(shedule_file_path)
     shedule_dict = {}
+
+    # ------ convert the keys to lowercase ------
+
     for index, row in shedule_df.iterrows():
         currShedule = shedule_df.iloc[index].to_dict()
         shedule_dict[currShedule["ScheduleID"]] = Schedule(**currShedule)
@@ -23,6 +26,10 @@ def get_inventory() -> dict:
     #this parses the inventory sheet and returns a dict with InventoryId as key
     inv_df = read_csv(inventory_file_path)
     inv_dict = {}
+
+    # ------ convert the keys to lowercase ------
+
+
     for index, row in inv_df.iterrows():
         currInv = inv_df.iloc[index].to_dict()
         inv_dict[currInv["InventoryId"]] = Inventory(**currInv)
