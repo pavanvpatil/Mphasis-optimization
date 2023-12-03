@@ -15,10 +15,11 @@ def get_schedule() -> dict:
     schedule_df = read_csv(schedule_file_path)
     schedule_dict = {}
 
-    # ------ convert the keys to lowercase ------
+    
 
     for index, row in schedule_df.iterrows():
         currSchedule = schedule_df.iloc[index].to_dict()
+        # ------ convert the keys to lowercase ------
         schedule_dict[currShedule["ScheduleID"]] = Schedule(**currSchedule)
     return schedule_dict
 
@@ -27,9 +28,10 @@ def get_inventory() -> dict:
     inv_df = read_csv(inventory_file_path)
     inv_dict = {}
 
-    # ------ convert the keys to lowercase ------
+    
 
     for index, row in inv_df.iterrows():
         currInv = inv_df.iloc[index].to_dict()
+        # ------ convert the keys to lowercase ------
         inv_dict[currInv["InventoryId"]] = Inventory(**currInv)
     return inv_dict

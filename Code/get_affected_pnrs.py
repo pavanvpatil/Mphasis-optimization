@@ -20,3 +20,5 @@ def get_affected_pnrs(InventoryId) -> dict:
         if pnr_booking[currBooking].carrier_cd == carrier_code and pnr_booking[currBooking].flt_num == fno:
             affected_pnrs[currBooking] = pnr_booking[currBooking]
     return affected_pnrs
+
+# sort the pnrs according to score (pnr ranking)
