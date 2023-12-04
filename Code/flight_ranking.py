@@ -50,7 +50,7 @@ def findDateTimeDifference(inv_id_affected, *inv_id_proposed) -> tuple:
     date_time_proposed_d = datetime.strptime(dt_proposed_depart, "%m/%d/%Y %H:%M")
 
     # calculating the difference in dates
-    dep_diff = (date_time_proposed - date_time_affected).total_seconds()/3600
+    dep_diff = (date_time_proposed_d - date_time_affected_d).total_seconds()/3600
 
     dt_affected_arrive = inv_dict[inv_id_affected].ArrivalDate + " " + schedule_dict[sch_id_affected].ArrivalTime # format mm/dd/yyyy hh:mm
     dt_proposed_arrive = inv_dict[inv_id_proposed[-1]].ArrivalDate + " " + schedule_dict[sch_id_proposed_l].ArrivalTime
@@ -60,7 +60,7 @@ def findDateTimeDifference(inv_id_affected, *inv_id_proposed) -> tuple:
     date_time_proposed_a = datetime.strptime(dt_proposed_arrive, "%m/%d/%Y %H:%M")
 
     # calculating the difference in dates
-    arrive_diff = (date_time_proposed - date_time_affected).total_seconds()/3600
+    arrive_diff = (date_time_proposed_a - date_time_affected_a).total_seconds()/3600
 
     return (arrive_diff, dep_diff)
 
