@@ -2,8 +2,8 @@ import csv
 import os
 from pandas import read_csv
 from dotenv import load_dotenv
-from classes.Schedule.schedule import Schedule
-from classes.Schedule.inventory import Inventory
+from Code.classes.Schedule.schedule import Schedule
+from Code.classes.Schedule.inventory import Inventory
 
 load_dotenv()
 schedule_file_path = os.getenv("SCHEDULE_FILE_PATH")
@@ -18,9 +18,10 @@ def get_schedule() -> dict:
     
 
     for index, row in schedule_df.iterrows():
-        currSchedule = schedule_df.iloc[index].to_dict()
+        curr_schedule = schedule_df.iloc[index].to_dict()
         # ------ convert the keys to lowercase ------
-        schedule_dict[currShedule["ScheduleID"]] = Schedule(**currSchedule)
+        curr_schedule = {k.lower(): v for k, v in curr_schedule.items()}
+        schedule_dict[curr_schedule["scheduleid"]] = Schedule(**curr_schedule)
     return schedule_dict
 
 def get_inventory() -> dict:
@@ -31,7 +32,8 @@ def get_inventory() -> dict:
     
 
     for index, row in inv_df.iterrows():
-        currInv = inv_df.iloc[index].to_dict()
+        curr_inv = inv_df.iloc[index].to_dict()
         # ------ convert the keys to lowercase ------
-        inv_dict[currInv["InventoryId"]] = Inventory(**currInv)
+        curr_inv = {k.lower(): v for k, v in curr_inv.items()}
+        inv_dict[curr_inv["inventoryid"]] = Inventory(**curr_inv)
     return inv_dict

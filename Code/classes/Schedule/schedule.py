@@ -3,54 +3,53 @@
 class Schedule:
     def __init__(
             self,
-            ScheduleID: str,
-            CarrierCode: str,
-            FlightNumber: str,
-            AircraftType: str,
-            AircraftTailNumber: str,
-            DepartureAirport: str,
-            ArrivalAirport: str,
-            DepartureTime: str,
-            ArrivalTime: str,
-            StartDate: str,
-            EndDate: str,
-            Status: str,
-            Sunday: str,
-            Monday: str,
-            Tuesday: str,
-            Wednesday: str,
-            Thursday: str,
-            Friday: str,
-            Saturday: str,
-            Frequency_per_week: str,
-            Frequency: str,
-            NoOfDepartures: str,
-            DepartureDates: str
+            scheduleid: str,
+            carriercode: str,
+            flightnumber: str,
+            aircrafttype: str,
+            aircrafttailnumber: str,
+            departureairport: str,
+            arrivalairport: str,
+            departuretime: str,
+            arrivaltime: str,
+            startdate: str,
+            enddate: str,
+            status: str,
+            sunday: str,
+            monday: str,
+            tuesday: str,
+            wednesday: str,
+            thursday: str,
+            friday: str,
+            saturday: str,
+            frequency_per_week: str,
+            frequency: str,
+            noofdepartures: str,
+            departuredates: str
 
     ):
-        self.ScheduleID = ScheduleID
-        self.CarrierCode = CarrierCode
-        self.FlightNumber = FlightNumber
-        self.AircraftType = AircraftType
-        self.AircraftTailNumber = AircraftTailNumber
-        self.DepartureAirport = DepartureAirport
-        self.ArrivalAirport = ArrivalAirport
-        self.DepartureTime = DepartureTime
-        self.ArrivalTime = ArrivalTime
-        self.StartDate = StartDate
-        self.EndDate = EndDate
-        self.Status = Status
-        self.Sunday = Sunday
-        self.Monday = Monday
-        self.Tuesday = Tuesday
-        self.Wednesday = Wednesday
-        self.Thursday = Thursday
-        self.Friday = Friday
-        self.Saturday = Saturday
-        self.Frequency_per_week = Frequency_per_week
-        self.Frequency = Frequency
-        self.NoOfDepartures = NoOfDepartures
-        self.DepartureDates = DepartureDates
-
-
-
+        self.scheduleid = scheduleid
+        self.carriercode = carriercode
+        self.flightnumber = flightnumber
+        self.aircrafttype = aircrafttype
+        self.aircrafttailnumber = aircrafttailnumber
+        self.departureairport = departureairport
+        self.arrivalairport = arrivalairport
+        self.departuretime = departuretime
+        self.arrivaltime = arrivaltime
+        self.startdate = startdate
+        self.enddate = enddate
+        self.status = status
+        self.sunday = sunday
+        self.monday = monday
+        self.tuesday = tuesday
+        self.wednesday = wednesday
+        self.thursday = thursday
+        self.friday = friday
+        self.saturday = saturday
+        self.frequency_per_week = frequency_per_week
+        self.frequency = frequency
+        self.noofdepartures = noofdepartures
+        self.departuredates = departuredates
+    def __repr__(self) -> str:
+        return f"Schedule({self.__dict__})"

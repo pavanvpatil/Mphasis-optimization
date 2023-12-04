@@ -1,8 +1,7 @@
-from get_schedule_and_inventory import get_inventory
-from get_schedule_and_inventory import get_schedule
-from classes.PNR.pnr_input import get_pnr_booking_input
+from Code.get_schedule_and_inventory import get_inventory
+from Code.get_schedule_and_inventory import get_schedule
+from Code.pnr_input import get_pnr_booking_input
 
-import classes.PNR.pnr_input
 
 def get_affected_pnrs(InventoryId) -> dict:
     #gets all affected pnr bookings with inventory id and returns a dict with RECLOC:CARRIER_CD:FLT_NO as key and object of booking class as value
@@ -12,9 +11,9 @@ def get_affected_pnrs(InventoryId) -> dict:
     inventory_dict = get_inventory()
     schedule_dict = get_schedule()
     affected_pnrs = {}
-    sched_id = inventory_dict[InventoryId].ScheduleId
-    fno = schedule_dict[sched_id].FlightNumber
-    carrier_code = schedule_dict[sched_id].CarrierCode
+    sched_id = inventory_dict[InventoryId].scheduleid
+    fno = schedule_dict[sched_id].flightnumber
+    carrier_code = schedule_dict[sched_id].carriercode
     pnr_booking = get_pnr_booking_input()
     for currBooking in pnr_booking:
         if pnr_booking[currBooking].carrier_cd == carrier_code and pnr_booking[currBooking].flt_num == fno:

@@ -1,8 +1,8 @@
 import os
 from pandas import read_csv
 from dotenv import load_dotenv
-from classes.PNR.passenger import Passenger
-from classes.PNR.booking import Booking
+from Code.classes.PNR.passenger import Passenger
+from Code.classes.PNR.booking import Booking
 
 load_dotenv()
 pnr_passenger_file_path = os.getenv("PNR_PASSENGER_FILE_PATH")
