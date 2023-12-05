@@ -1,17 +1,21 @@
 import os
 from pandas import read_csv
 from dotenv import load_dotenv
-from pnr.passenger import Passenger
-from pnr.booking import Booking
+from src.classes.pnr.booking import Booking
+from src.classes.pnr.passenger import Passenger
 
 load_dotenv()
 pnr_passenger_file_path = os.getenv("PNR_PASSENGER_FILE_PATH")
 pnr_booking_file_path = os.getenv("PNR_BOOKING_FILE_PATH")
 
 
-def get_pnr_passenger_input() -> dict:
+def get_pnr_passenger_input() -> dict[str, Passenger]:
     '''
     Fetches input from PNR passenger csv file and returns a dictionary of passengers with doc_id as key.
+
+    :param None
+    :return: dictionary of passengers with doc_id as key
+    :rtype: dict[str, Passenger]
     '''
     pnr_passenger_df = read_csv(pnr_passenger_file_path)
     passenger_dict = {}
@@ -22,9 +26,13 @@ def get_pnr_passenger_input() -> dict:
     return passenger_dict
 
 
-def get_pnr_booking_input() -> dict:
+def get_pnr_booking_input() -> dict[str, Booking]:
     '''
     Fetches input from PNR booking csv file and returns a dictionary of bookings with booking_key as key.
+
+    :param None
+    :return: dictionary of bookings with booking_key as key (generated using recloc, carrier_cd and flt_num)
+    :rtype: dict[str, Booking]
     '''
     pnr_booking_df = read_csv(pnr_booking_file_path)
     booking_dict = {}
