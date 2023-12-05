@@ -1,4 +1,7 @@
-#class for schedule exel sheet
+'''
+This file contains the class for Schedule
+'''
+
 
 class Schedule:
     def __init__(
@@ -51,5 +54,6 @@ class Schedule:
         self.frequency = frequency
         self.noofdepartures = noofdepartures
         self.departuredates = departuredates
+
     def __repr__(self) -> str:
         return f"Schedule({self.__dict__})"
