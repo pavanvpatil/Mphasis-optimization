@@ -18,9 +18,11 @@ def get_affected_pnrs(inventory_id: str) -> list[str]:
     schedule_id = inventory_dict[inventory_id].scheduleid
     fno = schedule_dict[schedule_id].flightnumber
     carrier_code = schedule_dict[schedule_id].carriercode
+    dep_date = inventory_dict[inventory_id].departuredate
+
 
     for curr_booking in booking_dict:
-        if booking_dict[curr_booking].carrier_cd == carrier_code and booking_dict[curr_booking].flt_num == fno:
+        if booking_dict[curr_booking].carrier_cd == carrier_code and booking_dict[curr_booking].flt_num == fno and booking_dict[curr_booking].dep_dt == dep_date:
             affected_pnrs.append(curr_booking)
 
     return affected_pnrs
@@ -33,12 +35,21 @@ def get_affected_passengers(inventory_id) -> list:
     return list of doc_id of affected passengers
     rtype list[str]
     '''
-    af_pnrs = get_affected_pnrs(inventory_id)
+    af_pnrs_list = get_affected_pnrs(inventory_id)
+    af_pnrs = set()
+    for pnr in af_pnrs_list:
+        af_pnrs.add(booking_dict[pnr].recloc)
+    print(af_pnrs)
     af_passengers = []
-    for pnr in af_pnrs:
-        for passenger in passenger_dict:
-            if af_pnrs[pnr].recloc == passenger_dict[passenger].recloc:
-                af_passengers.append(passenger_dict[passenger].doc_id)
+    # for pnr in af_pnrs:
+    #     for passenger in passenger_dict:
+    #         if booking_dict[pnr].recloc == passenger_dict[passenger].recloc:
+    #             af_passengers.append(passenger_dict[passenger].doc_id)
+    for passenger in passenger_dict:
+        if passenger_dict[passenger].recloc in af_pnrs:
+            af_passengers.append(passenger_dict[passenger].doc_id)
+
+
     return af_passengers
 
 def rank_pnrs(inventory_id) -> list:
@@ -55,6 +66,7 @@ def rank_pnrs(inventory_id) -> list:
     cabinY = ["S", "V", "W", "Z", "O", "S", "T", "U", "M", "N", "Y", "E", "L"]
     affected_pnrs_list = get_affected_pnrs(inventory_id)
     affected_pnrs = {}
+    recloc_score_dict = {}
     for pnr in affected_pnrs_list:
         affected_pnrs[pnr] = booking_dict[pnr]
     for booking in affected_pnrs:
@@ -68,26 +80,16 @@ def rank_pnrs(inventory_id) -> list:
         elif curr_booking.cos_cd[0] in cabinY:
             score = score + 1500
         recloc = affected_pnrs[booking].recloc
-
-        for passenger in passenger_dict:
-            if passenger_dict[passenger].recloc == recloc:
-                if len(str(passenger_dict[passenger].ssr_code_cd1)) > 3:
-                    score = score + 200 * (str(passenger_dict[passenger].ssr_code_cd1).count(",") + 1)
-        score = score + 750 #for class
-
-        affected_pnrs[booking].score = score
-    ranked_pnrs = dict(sorted(affected_pnrs.items(), key=lambda x: x[1].score, reverse=True))
-
-    recloc_list = [ranked_pnrs[k].recloc for k in ranked_pnrs]
-
-    op = []
-    for pnr in recloc_list:
-        a = False
-        for passenger in passenger_dict:
-            if passenger_dict[passenger].recloc == pnr:
-                a = True
-                op.append(passenger)
-        if not a:
-            op.append("nan")  # if recloc is not found in the pnr_passenger sheet
-
+        score = score + 750  # for class
+        recloc_score_dict[recloc] = score
+    aff_passengers_dict = {}
+    for passenger in passenger_dict:
+        if passenger_dict[passenger].recloc in recloc_score_dict:
+            score = recloc_score_dict[passenger_dict[passenger].recloc]
+            ssr_score = 0
+            if len(str(passenger_dict[passenger].ssr_code_cd1)) > 3:
+                ssr_score = 200 * (str(passenger_dict[passenger].ssr_code_cd1).count(",") + 1)
+            aff_passengers_dict[passenger_dict[passenger].doc_id] = ssr_score + score
+    print(aff_passengers_dict)
+    op = sorted(aff_passengers_dict.keys(), key=lambda x: aff_passengers_dict[x], reverse=True)
     return op
