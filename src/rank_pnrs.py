@@ -90,6 +90,5 @@ def rank_pnrs(inventory_id) -> list:
             if len(str(passenger_dict[passenger].ssr_code_cd1)) > 3:
                 ssr_score = 200 * (str(passenger_dict[passenger].ssr_code_cd1).count(",") + 1)
             aff_passengers_dict[passenger_dict[passenger].doc_id] = ssr_score + score
-    print(aff_passengers_dict)
     op = sorted(aff_passengers_dict.keys(), key=lambda x: aff_passengers_dict[x], reverse=True)
     return op
