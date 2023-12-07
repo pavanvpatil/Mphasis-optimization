@@ -1,6 +1,7 @@
 import os
 from pandas import read_csv
 from dotenv import load_dotenv
+from datetime import datetime
 from src.classes.flight.schedule import Schedule
 from src.classes.flight.inventory import Inventory
 
@@ -39,3 +40,12 @@ def get_inventory() -> dict[str, Inventory]:
         curr_inv = {k.lower(): v for k, v in curr_inv.items()}
         inv_dict[curr_inv["inventoryid"]] = Inventory(**curr_inv)
     return inv_dict
+
+
+def append_dict(date : str,inventoryId :str,*dateDictionary:dict) -> dict:
+    input_date = datetime.strptime(date,"%m/%d/%y")
+    if(input_date in dateDictionary.keys):
+        dateDictionary[input_date].append(inventoryId)
+    else:
+        dateDictionary[input_date] = [inventoryId]
+    return dateDictionary
