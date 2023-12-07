@@ -42,10 +42,44 @@ def get_inventory() -> dict[str, Inventory]:
     return inv_dict
 
 
-def append_dict(date : str,inventoryId :str,*dateDictionary:dict) -> dict:
-    input_date = datetime.strptime(date,"%m/%d/%y")
-    if(input_date in dateDictionary.keys):
-        dateDictionary[input_date].append(inventoryId)
+def append_dict(date : str,inventory_obj: Inventory, *date_dictionary: dict) -> dict:
+    '''
+    Takes in inventory_id string as input and appends it to a dictionary of dates & airports
+    {
+        Date1:  {
+                    Airport1: [inv_id_1, inv_id_2, ...]
+                    Airport2: [inv_id_3, inv_id_4, ...]
+                }
+        Date2:  {
+                    Airport2: [inv_id_5, inv_id_6, ...]
+                    Airport4: [inv_id_7, inv_id_8, ...]
+                }
+        Date3:  {
+                    Airport5: [inv_id_9, inv_id_10, ...]
+                    Airport6: [inv_id_11, inv_id_12, ...]
+                }
+        .
+        .
+        .
+
+    }
+    A calendar of sorts
+    '''
+
+    date = inventory_obj.departuredate
+    departure_city_code = inventory_obj.departureairport
+
+    # input_date = datetime.strptime(date,"%m/%d/%y")
+
+    if(date in date_dictionary.keys):
+        all_flights_on_day_dict = date_dictionary[date]
+
+        if[departure_city_code in all_flights_on_day_dict.keys]:
+            date_dictionary[date][departure_city_code].append(inventory_obj.inventory_id)
+        else:
+            date_dictionary[date][departure_city_code] = [inventory_obj.inventory_id]
     else:
-        dateDictionary[input_date] = [inventoryId]
-    return dateDictionary
+        date_dictionary[date] = {}
+        date_dictionary[date][departure_city_code] = [inventory_obj.inventory_id]
+
+    return date_dictionary
