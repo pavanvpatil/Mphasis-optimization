@@ -2,7 +2,7 @@
 This file contains the class for Schedule
 '''
 
-
+from datetime import datetime
 class Schedule:
     def __init__(
             self,
@@ -57,3 +57,6 @@ class Schedule:
 
     def __repr__(self) -> str:
         return f"Schedule({self.__dict__})"
+    
+    def get_time_of_departure(self):
+        return datetime.strptime(self.departuretime,"%m/%d/%Y")

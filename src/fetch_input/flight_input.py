@@ -42,7 +42,8 @@ def get_inventory() -> dict[str, Inventory]:
     return inv_dict
 
 
-def append_dict(date : str,inventory_obj: Inventory, *date_dictionary: dict) -> dict:
+
+def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
     '''
     Takes in inventory_id string as input and appends it to a dictionary of dates & airports
     {
@@ -66,20 +67,50 @@ def append_dict(date : str,inventory_obj: Inventory, *date_dictionary: dict) -> 
     A calendar of sorts
     '''
 
-    date = inventory_obj.departuredate
+    dep_date = inventory_obj.departuredate
     departure_city_code = inventory_obj.departureairport
 
-    # input_date = datetime.strptime(date,"%m/%d/%y")
+    dep_date_time_string = inventory_obj.departuredate + \
+        " " + \
+        schedule_dict[inventory_obj.schdeuleid].departuretime
 
-    if(date in date_dictionary.keys):
-        all_flights_on_day_dict = date_dictionary[date]
+    dep_date_time = datetime.strptime(dep_date_time_string,"%m/%d/%Y %H:%M")
 
-        if[departure_city_code in all_flights_on_day_dict.keys]:
-            date_dictionary[date][departure_city_code].append(inventory_obj.inventory_id)
-        else:
-            date_dictionary[date][departure_city_code] = [inventory_obj.inventory_id]
+    if(dep_date in date_dictionary.keys):
+            inv_id_list = date_dictionary[dep_date]
+            
+            idx_l = 0
+            idx_r = len(inv_id_list) - 1
+            
+
+            while (not idx_l == idx_r):
+                idx_mid = (idx_l + idx_r)//2
+                mid_inv_id = inv_id_list[idx_mid]
+
+                mid_date_time_string = inv_dict[mid_inv_id].departuredate + \
+                " " + \
+                schedule_dict[inv_dict[mid_inv_id].schdeuleid].departuretime
+
+                mid_date_time = datetime.strptime(mid_date_time_string,"%m/%d/%Y %H:%M")
+
+                if dep_date_time < mid_date_time:
+                    idx_r = idx_mid
+                else:
+                    idx_l = idx_mid
+            
+            final_date_time_string = inv_dict[l_inv_id].departuredate + \
+                " " + \
+                schedule_dict[inv_dict[l_inv_id].schdeuleid].departuretime
+
+            final_date_time = datetime.strptime(final_date_time_string,"%m/%d/%Y %H:%M")
+
+            if dep_date_time < final_date_time:
+                date_dictionary[dep_date].insert(idx_l, inventory_obj.inventoryid)
+            else:
+                date_dictionary[dep_date].insert(idx_l+1, inventory_obj.inventoryid)
+
+            date_dictionary[dep_date].append(inventory_obj.inventory_id)
     else:
-        date_dictionary[date] = {}
-        date_dictionary[date][departure_city_code] = [inventory_obj.inventory_id]
+        date_dictionary[dep_date] = [inventory_obj.inventory_id]
 
     return date_dictionary
