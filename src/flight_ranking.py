@@ -206,14 +206,14 @@ def flight_date_comparator(inv_id_1: Inventory, inv_id_2: Inventory) -> bool:
 
     date_time_1 = inv_id_1.departuredate + \
         " " + \
-        schedule_dict[sched_id_1].departuretime
+        schedule_dict[inv_id_1.scheduleid].departuretime
 
     date_time_depart_1 = datetime.strptime(
                 date_time_1, "%m/%d/%Y %H:%M")
 
     date_time_2 = inv_id_2.departuredate + \
         " " + \
-        schedule_dict[sched_id_2].departuretime
+        schedule_dict[inv_id_2.scheduleid].departuretime
 
     date_time_depart_2 = datetime.strptime(
                 date_time_2, "%m/%d/%Y %H:%M")
@@ -222,12 +222,18 @@ def flight_date_comparator(inv_id_1: Inventory, inv_id_2: Inventory) -> bool:
 def find_alternate_flight_on_day(inventory_obj: Inventory) -> list[str]:
 
     affected_date_string = inventory_obj.departuredate
+
     # departure_airport = inventory_obj.departureairport
     originalTimeOfDeparture = datetime.strptime(schedule_dict[inventory_obj].departuretime,"%H:%M")
     
 
     affected_date = datetime.strptime(affected_date_string,"%m/%d/%Y")
     
+
+    departure_airport = inventory_obj.departureairport
+
+    affected_date = datetime.strptime(affected_date_string,"%m/%d/%Y")
+
 
     suggested_date_list = [(affected_date + datetime.timedelta(days=x)).strftime("%m/%d/%Y") for x in range(4)]
 
@@ -241,6 +247,4 @@ def find_alternate_flight_on_day(inventory_obj: Inventory) -> list[str]:
     while()
     #         suggested_inventory_ids = suggested_inventory_ids + suggested_date_list[date][departure_airport]
 
-    # return suggested_inventory_ids
-
-    
+    return suggested_inventory_ids

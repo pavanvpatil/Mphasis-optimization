@@ -8,6 +8,4 @@ from src.flight_geo import get_distance_from_airport_codes
 
 # print(get_airport_info())
 
-# print(get_distance_from_airport_codes("HBX", "DEL"))
-
-get_schedule()
+print(get_distance_from_airport_codes("HBX", "DEL"))
