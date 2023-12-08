@@ -3,8 +3,6 @@ import smtplib
 def send_mails_bulk(receivers_address, message :str) -> None:
     '''Sends a message as mail to the list of receivers from the sender mail
 
-    :param sender_address: The mail address of the sender
-    :param type: str
     :param receivers_address: List of mail addresses of the receivers
     :param type: list[str]
     :param message: The content of the mail
@@ -48,8 +46,6 @@ def send_mails_bulk(receivers_address, message :str) -> None:
 def send_mail_ind(receivers_address :str, message :str) -> None:
     '''Sends a message as mail to an individual receiver from the sender mail
 
-    :param sender_address: The mail address of the sender
-    :param type: str
     :param receivers_address: The mail address of the receiver
     :param type: str
     :param message: The content of the mail
