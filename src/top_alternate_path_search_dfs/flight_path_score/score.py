@@ -124,12 +124,26 @@ def get_equipment_score(inventory_id_affected: str, path_inventory_ids: list[str
     return float((count_of_same_aircraft_type/len(path_inventory_ids)) * 50)
 
 
+def get_stop_over_score(
+    path_inventory_ids_len: int
+) -> float:
+    '''Function to calculate the stop over score
+    score = -20 if the proposed sequence has more than one flight
+
+    :param path_inventory_ids_len: length of the proposed sequence
+    :type path_inventory_ids_len: int
+    :return: stop over score
+    :rtype: float
+    '''
+    return -20.0 if path_inventory_ids_len > 1 else 0.0
+
+
 def get_alternate_flight_path_score(
     inventory_id_affected: str,
     path_inventory_ids: list[str],
 ) -> float:
     '''Function to calculate the alternate flight path score
-    score = distance score + arrival time score + departure time score + equipment score
+    score = distance score + arrival time score + departure time score + equipment score + stop over score
 
     :param inventory_id_affected: inventory id of the affected flight
     :type inventory_id_affected: str
@@ -145,7 +159,8 @@ def get_alternate_flight_path_score(
         get_arrival_time_score(inventory_id_affected=inventory_id_affected, inventory_id_proposed_arrival=path_inventory_ids[-1]) + \
         get_departure_time_score(inventory_id_affected=inventory_id_affected, inventory_id_proposed_departure=path_inventory_ids[0]) + \
         get_equipment_score(inventory_id_affected=inventory_id_affected,
-                            path_inventory_ids=path_inventory_ids)
+                            path_inventory_ids=path_inventory_ids) + \
+        get_stop_over_score(path_inventory_ids_len=len(path_inventory_ids))
 
 
 def get_top_alternate_paths(
