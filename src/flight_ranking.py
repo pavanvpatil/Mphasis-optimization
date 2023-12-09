@@ -227,25 +227,26 @@ def flight_date_comparator(inv_id_1: Inventory, inv_id_2: Inventory) -> bool:
 def find_alternate_flight_on_day(inventory_obj: Inventory, date_dictionary: dict, schedule_dict: dict, inv_dict: dict) -> list[str]:
 
     affected_date_string = inventory_obj.departuredate
+    print(affected_date_string)
 
     originalTimeOfDeparture = datetime.strptime(schedule_dict[inventory_obj.scheduleid].departuretime,"%H:%M")
-    
 
     affected_date = datetime.strptime(affected_date_string,"%m/%d/%Y")
-    
-    affected_date_string = inventory_obj.departuredate
+
     suggested_date_list = []
+
     for x in range(4):
         append_this = (affected_date + timedelta(days=x)).strftime("%m/%d/%Y")
         if append_this in date_dictionary.keys():
             suggested_date_list.append(append_this)
 
+    print("s_d_list", suggested_date_list)
     suggested_inventory_ids = []
 
 
-    if len(suggested_date_list) == 3:
-        for date in suggested_date_list[0:-1]:
-            suggested_inventory_ids.extend(date_dictionary[date])
+    for date in suggested_date_list[0:-1]:
+        print(date, date_dictionary[date])
+        suggested_inventory_ids.extend(date_dictionary[date])
 
         #do binary search until the stipulated
         last_day = date_dictionary[suggested_date_list[-1]]
@@ -263,7 +264,7 @@ def find_alternate_flight_on_day(inventory_obj: Inventory, date_dictionary: dict
             else:
                 high=mid
 
-        suggested_inventory_ids = suggested_inventory_ids+last_day[:low]
+        suggested_inventory_ids = suggested_inventory_ids + last_day[:low]
     return suggested_inventory_ids
 
 
