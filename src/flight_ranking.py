@@ -1,8 +1,10 @@
 from datetime import datetime,timedelta
-
+import pandas as pd
 from src import inventory_dict
 from src import schedule_dict
 from src import airport_city_codes_dict
+from src.classes.flight.schedule import Schedule
+from src.classes.flight.inventory import Inventory
 
 
 def city_pairs_check(
@@ -118,7 +120,7 @@ def connection_flight_check(
     time_diff = find_date_time_difference(
         inv_id_affected=inv_id_affected,
         inv_id_proposed_dep=inv_id_proposed[0],
-        inv_id_proposed_arr=inv_id_proposed[-1]
+        inv_id_proposed_arfromr=inv_id_proposed[-1]
     )
 
     if time_diff[1] > max_dep_diff_hours:
@@ -222,39 +224,46 @@ def flight_date_comparator(inv_id_1: Inventory, inv_id_2: Inventory) -> bool:
 '''
     Need to be tested
 '''
-def find_alternate_flight_on_day(inventory_obj: Inventory) -> list[str]:
+def find_alternate_flight_on_day(inventory_obj: Inventory, date_dictionary: dict, schedule_dict: dict, inv_dict: dict) -> list[str]:
 
     affected_date_string = inventory_obj.departuredate
 
-    originalTimeOfDeparture = datetime.strptime(schedule_dict[inventory_obj].departuretime,"%H:%M")
+    originalTimeOfDeparture = datetime.strptime(schedule_dict[inventory_obj.scheduleid].departuretime,"%H:%M")
     
 
     affected_date = datetime.strptime(affected_date_string,"%m/%d/%Y")
     
     affected_date_string = inventory_obj.departuredate
-    suggested_date_list = [(affected_date + datetime.timedelta(days=x)).strftime("%m/%d/%Y") for x in range(4)]
+    suggested_date_list = []
+    for x in range(4):
+        append_this = (affected_date + timedelta(days=x)).strftime("%m/%d/%Y")
+        if append_this in date_dictionary.keys():
+            suggested_date_list.append(append_this)
+
     suggested_inventory_ids = []
 
-    for date in suggested_date_list[0:-1]:
-        suggested_inventory_ids.extend(date_dictionary[date])
 
-    #do binary search until the stipulated
-    last_day = date_dictionary[suggested_date_list[-1]]
-    high = len(last_day)-1
-    low  = 0
-    while(not low == high):
-        mid = (low+high)//2
-        midval = schedule_dict[last_day[mid]].get_time_of_departure()
+    if len(suggested_date_list) == 3:
+        for date in suggested_date_list[0:-1]:
+            suggested_inventory_ids.extend(date_dictionary[date])
 
-        if(mid == low):
-            break
+        #do binary search until the stipulated
+        last_day = date_dictionary[suggested_date_list[-1]]
+        high = len(last_day)-1
+        low  = 0
+        while(not low == high):
+            mid = (low+high)//2
+            midval = schedule_dict[last_day[mid]].get_time_of_departure()
 
-        if midval < originalTimeOfDeparture:
-            low = mid
-        else:
-            high=mid
+            if(mid == low):
+                break
 
-    suggested_inventory_ids = suggested_inventory_ids+last_day[:low]
+            if midval < originalTimeOfDeparture:
+                low = mid
+            else:
+                high=mid
+
+        suggested_inventory_ids = suggested_inventory_ids+last_day[:low]
     return suggested_inventory_ids
 
 

@@ -43,7 +43,7 @@ def get_inventory() -> dict[str, Inventory]:
 
 
 
-def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
+def append_dict(inventory_obj: Inventory, date_dictionary: dict, schedule_dict: dict, inv_dict: dict) -> dict:
     '''
     Takes in inventory_id string as input and appends it to a dictionary of dates
     {
@@ -63,11 +63,11 @@ def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
 
     dep_date_time_string = inventory_obj.departuredate + \
         " " + \
-        schedule_dict[inventory_obj.schdeuleid].departuretime
+        schedule_dict[inventory_obj.scheduleid].departuretime
 
     dep_date_time = datetime.strptime(dep_date_time_string,"%m/%d/%Y %H:%M")
 
-    if(dep_date in date_dictionary.keys):
+    if(dep_date in date_dictionary.keys()):
             inv_id_list = date_dictionary[dep_date]
             
             idx_l = 0
@@ -80,7 +80,7 @@ def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
 
                 mid_date_time_string = inv_dict[mid_inv_id].departuredate + \
                 " " + \
-                schedule_dict[inv_dict[mid_inv_id].schdeuleid].departuretime
+                schedule_dict[inv_dict[mid_inv_id].scheduleid].departuretime
 
                 mid_date_time = datetime.strptime(mid_date_time_string,"%m/%d/%Y %H:%M")
 
@@ -91,7 +91,7 @@ def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
             
             final_date_time_string = inv_dict[inv_id_list[idx_l]].departuredate + \
                 " " + \
-                schedule_dict[inv_dict[inv_id_list[idx_l]].schdeuleid].departuretime
+                schedule_dict[inv_dict[inv_id_list[idx_l]].scheduleid].departuretime
 
             final_date_time = datetime.strptime(final_date_time_string,"%m/%d/%Y %H:%M")
 
@@ -100,8 +100,8 @@ def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
             else:
                 date_dictionary[dep_date].insert(idx_l+1, inventory_obj.inventoryid)
 
-            date_dictionary[dep_date].append(inventory_obj.inventory_id)
+            date_dictionary[dep_date].append(inventory_obj.inventoryid)
     else:
-        date_dictionary[dep_date] = [inventory_obj.inventory_id]
+        date_dictionary[dep_date] = [inventory_obj.inventoryid]
 
     return date_dictionary
