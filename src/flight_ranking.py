@@ -240,16 +240,30 @@ def find_alternate_flight_on_day(inventory_obj: Inventory) -> list[str]:
         suggested_inventory_ids.extend(date_dictionary[date])
 
     #do binary search until the stipulated
-    mid  = 0
-    left, right = 0,len(date_dictionary[suggested_date_list[2]])-1 
-    while left< right:
-        mid = left + (right) // 2
-        if originalTimeOfDeparture > schedule_dict[date_dictionary[suggested_date_list[2]][mid]].get_time_of_departure():
-            right = mid
+    iter = date_dictionary[suggested_date_list[-1]]
+    high = len(iter)-1
+    item = originalTimeOfDeparture
+    low  = 0
+    min = high
+    while(low<high and (high - low) > 1):
+        mid = (low+high)//2
+        midval = schedule_dict[iter[mid]].get_time_of_departure()
+        minval = schedule_dict[iter[min]].get_time_of_departure()
+        if midval < item :
+            low = mid
+        elif midval > item and midval < minval:
+            min = mid
+            high=mid
+        elif midval == item:
+            min = mid
+            break
         else:
             break
+    suggested_inventory_ids = suggested_inventory_ids+iter[:min]
+
+
       
-    suggested_inventory_ids= suggested_inventory_ids+date_dictionary[suggested_date_list[-1]][: (originalTimeOfDeparture == schedule_dict[date_dictionary[suggested_date_list[2]][mid]].get_time_of_departure())?mid+1:mid]
+
     return suggested_inventory_ids
 
 
