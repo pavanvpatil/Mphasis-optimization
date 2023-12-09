@@ -21,7 +21,7 @@ def get_adjacency_list(
     destination_airport_code = affected_inventory.arrivalairport
 
     # key: airport code A , value: list of inventory ids that depart from airport code A
-    adjacency_list = dict()
+    adjacency_list: dict[str, list[str]] = dict()
     adjacency_list[source_airport_code] = []
     adjacency_list[destination_airport_code] = []
 
