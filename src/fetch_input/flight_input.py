@@ -45,20 +45,11 @@ def get_inventory() -> dict[str, Inventory]:
 
 def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
     '''
-    Takes in inventory_id string as input and appends it to a dictionary of dates & airports
+    Takes in inventory_id string as input and appends it to a dictionary of dates
     {
-        Date1:  {
-                    Airport1: [inv_id_1, inv_id_2, ...]
-                    Airport2: [inv_id_3, inv_id_4, ...]
-                }
-        Date2:  {
-                    Airport2: [inv_id_5, inv_id_6, ...]
-                    Airport4: [inv_id_7, inv_id_8, ...]
-                }
-        Date3:  {
-                    Airport5: [inv_id_9, inv_id_10, ...]
-                    Airport6: [inv_id_11, inv_id_12, ...]
-                }
+        Date1:  [inv_id_1, inv_id_2, ...]
+        Date2:  [inv_id_3, inv_id_4, ...]
+        Date3:  [inv_id_5, inv_id_6, ...]
         .
         .
         .
@@ -98,9 +89,9 @@ def append_dict(inventory_obj: Inventory, *date_dictionary: dict) -> dict:
                 else:
                     idx_l = idx_mid
             
-            final_date_time_string = inv_dict[l_inv_id].departuredate + \
+            final_date_time_string = inv_dict[inv_id_list[idx_l]].departuredate + \
                 " " + \
-                schedule_dict[inv_dict[l_inv_id].schdeuleid].departuretime
+                schedule_dict[inv_dict[inv_id_list[idx_l]].schdeuleid].departuretime
 
             final_date_time = datetime.strptime(final_date_time_string,"%m/%d/%Y %H:%M")
 
