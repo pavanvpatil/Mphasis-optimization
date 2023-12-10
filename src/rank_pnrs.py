@@ -154,4 +154,4 @@ def get_avg_pnr_score(inventory_id) -> float:
                         ",") + 1)
             total_pnr_score = total_pnr_score + ssr_score + pnr_score
 
-    return total_pnr_score/num_passengers
+    return float(total_pnr_score/num_passengers)
