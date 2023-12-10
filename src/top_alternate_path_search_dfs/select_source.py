@@ -16,7 +16,7 @@ def select_min_source(adjacency_list: dict[str, list[str]], inventory_id_affecte
 
     affected_src_airport_code = inventory_dict[inventory_id_affected].departureairport
 
-    if len(adjacency_list[affected_src_airport_code]) == 0:
+    if len(adjacency_list[affected_src_airport_code]) != 0:
         return affected_src_airport_code
 
     airport_codes_list: list[str] = list(adjacency_list.keys())
