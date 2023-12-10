@@ -1,4 +1,4 @@
-from src.fetch_input.flight_input import get_inventory, get_schedule
+from src.fetch_input.flight_input import get_inventory, get_schedule, get_date_inventory_list_dict
 from src.fetch_input.pnr_input import get_pnr_booking_input, get_pnr_passenger_input
 from src.fetch_input.airport_extractor import get_airport_city_codes, get_airport_info
 
@@ -8,3 +8,4 @@ passenger_dict = get_pnr_passenger_input()
 booking_dict = get_pnr_booking_input()
 airport_city_codes_dict = get_airport_city_codes()
 airport_city_info_dict = get_airport_info()
+date_inventory_list_dict = get_date_inventory_list_dict()
