@@ -2,6 +2,7 @@ from src import inventory_dict
 from src import schedule_dict
 from src.top_alternate_path_search_dfs.create_graph import get_adjacency_list
 from src.top_alternate_path_search_dfs.flight_path_score.score import get_top_alternate_paths
+from src.inventory_edges.inventory_edges import get_inventory_edges
 from datetime import datetime
 
 
@@ -107,8 +108,8 @@ def init_dfs(
     :rtype: list[tuple[list[str], float]]
     '''
 
-    # call function to get valid inventory id list (edges of the graph): to be implemented
-    inventory_id_list = []
+    inventory_id_list = get_inventory_edges(
+        inventory_id_affected=inventory_id_affected)
 
     adjacency_list = get_adjacency_list(
         inventory_id_affected=inventory_id_affected,

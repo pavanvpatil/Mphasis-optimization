@@ -1,8 +1,10 @@
 import os
 from pandas import read_csv
 from dotenv import load_dotenv
+from datetime import datetime
 from src.classes.flight.schedule import Schedule
 from src.classes.flight.inventory import Inventory
+from src import inventory_dict, schedule_dict
 
 load_dotenv()
 schedule_file_path = os.getenv("SCHEDULE_FILE_PATH")
@@ -39,3 +41,22 @@ def get_inventory() -> dict[str, Inventory]:
         curr_inv = {k.lower(): v for k, v in curr_inv.items()}
         inv_dict[curr_inv["inventoryid"]] = Inventory(**curr_inv)
     return inv_dict
+
+
+def get_date_inventory_list_dict() -> dict[datetime, list[str]]:
+    '''This function returns a dictionary of dates and inventory ids
+
+    :param None
+    :return: dictionary of dates and inventory ids
+    :rtype: dict[datetime, list[str]]
+    '''
+
+    date_inventory_list_dict: dict[datetime, list[str]] = {}
+    sorted_inventory_list = sorted(inventory_dict.values(), key=lambda x: datetime.strptime(
+        x.departuredate + " " + schedule_dict[x.scheduleid].departuretime, "%m/%d/%Y %H:%M"))
+
+    for inventory_obj in sorted_inventory_list:
+        date_inventory_list_dict[datetime.strptime(
+            inventory_obj.departuredate, "%m/%d/%Y")].append(inventory_obj.inventoryid)
+
+    return date_inventory_list_dict
