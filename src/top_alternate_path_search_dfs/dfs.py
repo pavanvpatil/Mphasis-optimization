@@ -3,6 +3,7 @@ from src import schedule_dict
 from src.top_alternate_path_search_dfs.create_graph import get_adjacency_list
 from src.top_alternate_path_search_dfs.flight_path_score.score import get_top_alternate_paths
 from src.inventory_edges.inventory_edges import get_inventory_edges
+from src.top_alternate_path_search_dfs.select_source import select_min_source
 from datetime import datetime
 
 
@@ -117,7 +118,8 @@ def init_dfs(
     )
 
     affected_inventory = inventory_dict[inventory_id_affected]
-    source_airport_code = affected_inventory.departureairport
+    source_airport_code = select_min_source(adjacency_list=adjacency_list,
+                                            inventory_id_affected=inventory_id_affected)
     destination_airport_code = affected_inventory.arrivalairport
 
     visited_airport_codes: set[str] = set()
