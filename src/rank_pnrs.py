@@ -2,7 +2,6 @@ from src import schedule_dict
 from src import inventory_dict
 from src import booking_dict
 from src import passenger_dict
-from src.fetch_input.pnr_input import get_pnr_passenger_input
 
 
 def get_affected_pnrs(inventory_id: str) -> set[str]:
@@ -67,16 +66,15 @@ def get_affected_passengers(inventory_id) -> list[str]:
     return affected_passengers_doc_ids
 
 
-def get_ranked_affected_passenger_doc_ids(inventory_id) -> list[str]:
+def get_pnr_score_dict(inventory_id) -> dict[str, int]:
     '''
-    This method ranks the affected pnrs as per the pnr_ranking sheet
+    This method returns a dictionary of pnr_score of affected pnrs for a given inventory id
 
-    param  inventory_id : Inventory id of affected flight
-    type inventory_id : str
-    return list of doc_id of passengers ranked as per pnr_score (highest score will be the first element)
-    rtype : list[str]
+    :param inventory_id: Inventory ID of the affected flight
+    :type inventory_id: str
+    :return: dictionary of pnr_score of affected pnrs
+    :rtype: dict[str, int]
     '''
-
     cabinJ = ["A", "D", "J"]
     cabinF = ["F", "B"]
     cabinY = ["S", "V", "W", "Z", "O", "S", "T", "U", "M", "N", "Y", "E", "L"]
@@ -98,6 +96,21 @@ def get_ranked_affected_passenger_doc_ids(inventory_id) -> list[str]:
         pnr_score = pnr_score + 750  # for class (should be checked further)
         pnr_score_dict[pnr] = pnr_score
 
+    return pnr_score_dict
+
+
+def get_ranked_affected_passenger_doc_ids(inventory_id) -> list[str]:
+    '''
+    This method ranks the affected pnrs as per the pnr_ranking sheet
+
+    param  inventory_id : Inventory id of affected flight
+    type inventory_id : str
+    return list of doc_id of passengers ranked as per pnr_score (highest score will be the first element)
+    rtype : list[str]
+    '''
+
+    pnr_score_dict = get_pnr_score_dict(inventory_id)
+
     affected_passengers_dict = {}
     for passenger_doc_id in passenger_dict:
         passenger = passenger_dict[passenger_doc_id]
@@ -113,3 +126,32 @@ def get_ranked_affected_passenger_doc_ids(inventory_id) -> list[str]:
     ranked_affected_passenger_doc_ids = sorted(affected_passengers_dict.keys(),
                                                key=lambda x: affected_passengers_dict[x], reverse=True)
     return ranked_affected_passenger_doc_ids
+
+
+def get_avg_pnr_score(inventory_id) -> float:
+    '''
+    This method returns the average pnr score of passengers of affected bookings of a given inventory
+
+    :param inventory_id: Inventory id of affected flight
+    :type inventory_id: str
+    :return average pnr score of passengers of affected bookings of a given inventory
+    :rtype float
+    '''
+
+    pnr_score_dict = get_pnr_score_dict(inventory_id)
+
+    num_passengers = 0
+    total_pnr_score = 0
+    for passenger_doc_id in passenger_dict:
+        num_passengers = num_passengers + 1
+        passenger = passenger_dict[passenger_doc_id]
+        if passenger.recloc in pnr_score_dict:
+            pnr_score = pnr_score_dict[passenger.recloc]
+            ssr_score = 0
+            if len(str(passenger.ssr_code_cd1)) > 3:
+                ssr_score = 200 * \
+                    (str(passenger.ssr_code_cd1).count(
+                        ",") + 1)
+            total_pnr_score = total_pnr_score + ssr_score + pnr_score
+
+    return float(total_pnr_score/num_passengers)
