@@ -53,7 +53,7 @@ def get_date_inventory_list_dict() -> dict[datetime, list[str]]:
 
     date_inventory_list_dict: dict[datetime, list[str]] = {}
     sorted_inventory_list = sorted(inventory_dict.values(), key=lambda x: datetime.strptime(
-        x.departuredate + " " + schedule_dict[x.inventoryid].departuretime, "%m/%d/%Y %H:%M"))
+        x.departuredate + " " + schedule_dict[x.scheduleid].departuretime, "%m/%d/%Y %H:%M"))
 
     for inventory_obj in sorted_inventory_list:
         date_inventory_list_dict[datetime.strptime(
