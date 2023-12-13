@@ -13,7 +13,7 @@ def get_inventory_edges(inventory_id_affected: str) -> list[str]:
     '''
 
     departure_date = datetime.strptime(
-        inventory_dict[inventory_id_affected].departuredate, '%Y-%m-%d')
+        inventory_dict[inventory_id_affected].departuredate, '%m-%d-%Y')
     departure_time = datetime.strptime(
         schedule_dict[inventory_dict[inventory_id_affected].scheduleid].departuretime, '%H:%M').time()
 
