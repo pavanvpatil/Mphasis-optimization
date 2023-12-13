@@ -1,7 +1,7 @@
 from src.rank_pnrs import get_avg_pnr_score
 
 
-def rank_affected_inventories(
+def get_rank_affected_inventories(
     affected_inventory_ids: list[str],
 ) -> list[str]:
     '''Returns a list of inventories sorted in descending order of average pnr score

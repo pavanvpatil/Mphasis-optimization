@@ -1,4 +1,5 @@
 import os
+import json
 from pandas import read_csv
 from dotenv import load_dotenv
 from datetime import datetime
@@ -42,6 +43,10 @@ def get_inventory() -> dict[str, Inventory]:
     for index, row in inv_df.iterrows():
         curr_inv = inv_df.iloc[index].to_dict()
         curr_inv = {k.lower(): v for k, v in curr_inv.items()}
+        curr_inv['fc_cd'] = json.loads(curr_inv['fc_cd'].replace("'", '"'))
+        curr_inv['bc_cd'] = json.loads(curr_inv['bc_cd'].replace("'", '"'))
+        curr_inv['pc_cd'] = json.loads(curr_inv['pc_cd'].replace("'", '"'))
+        curr_inv['ec_cd'] = json.loads(curr_inv['ec_cd'].replace("'", '"'))
         inv_dict[curr_inv["inventoryid"]] = Inventory(**curr_inv)
     return inv_dict
 
@@ -64,6 +69,7 @@ def get_date_inventory_list_dict() -> dict[datetime, list[str]]:
             date_inventory_list_dict[datetime.strptime(
                 inventory_obj.departuredate, "%m-%d-%Y")].append(inventory_obj.inventoryid)
         else:
-            date_inventory_list_dict[datetime.strptime(inventory_obj.departuredate, "%m-%d-%Y")] = [inventory_obj.inventoryid]
+            date_inventory_list_dict[datetime.strptime(
+                inventory_obj.departuredate, "%m-%d-%Y")] = [inventory_obj.inventoryid]
 
     return date_inventory_list_dict

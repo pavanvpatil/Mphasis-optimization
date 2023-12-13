@@ -42,10 +42,10 @@ class Inventory:
         ec_bookedinventory: str,
         ec_oversold: str,
         ec_availableinventory: str,
-        fc_cd: str,
-        bc_cd: str,
-        pc_cd: str,
-        ec_cd: str
+        fc_cd: dict[str, int],
+        bc_cd: dict[str, int],
+        pc_cd: dict[str, int],
+        ec_cd: dict[str, int]
     ):
         self.inventoryid = inventoryid
         self.scheduleid = scheduleid
