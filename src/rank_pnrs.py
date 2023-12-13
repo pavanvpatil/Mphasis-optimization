@@ -18,9 +18,10 @@ def get_affected_pnrs(inventory_id: str) -> set[str]:
     flight_number = schedule_dict[schedule_id].flightnumber
     carrier_code = schedule_dict[schedule_id].carriercode
     dep_date = inventory_dict[inventory_id].departuredate
+    dep_key = inventory_dict[inventory_id].dep_key[0: -2]
 
     for booking_id in booking_dict:
-        if booking_dict[booking_id].carrier_cd == carrier_code and booking_dict[booking_id].flt_num == flight_number and booking_dict[booking_id].dep_dt == dep_date:
+        if booking_dict[booking_id].dep_key == dep_key:
             affected_pnrs.add(booking_dict[booking_id].recloc)
 
     return affected_pnrs
@@ -41,8 +42,10 @@ def get_affected_bookings(inventory_id: str) -> set[str]:
     carrier_code = schedule_dict[schedule_id].carriercode
     dep_date = inventory_dict[inventory_id].departuredate
 
+    dep_key = inventory_dict[inventory_id].dep_key[0: -2]
+
     for booking_id in booking_dict:
-        if booking_dict[booking_id].carrier_cd == carrier_code and booking_dict[booking_id].flt_num == flight_no and booking_dict[booking_id].dep_dt == dep_date:
+        if booking_dict[booking_id].dep_key == dep_key:
             affected_bookings.add(booking_id)
 
     return affected_bookings
@@ -75,9 +78,9 @@ def get_pnr_score_dict(inventory_id) -> dict[str, int]:
     :return: dictionary of pnr_score of affected pnrs
     :rtype: dict[str, int]
     '''
-    cabinJ = ["A", "D", "J"]
-    cabinF = ["F", "B"]
-    cabinY = ["S", "V", "W", "Z", "O", "S", "T", "U", "M", "N", "Y", "E", "L"]
+    cabinJ = ["BusinessClass"]
+    cabinF = ["FirstClass"]
+    cabinY = ["EconomyClass", "PremiumEconomyClass"]
 
     pnr_score_dict = {}
     affected_booking_ids = get_affected_bookings(inventory_id)
@@ -86,15 +89,18 @@ def get_pnr_score_dict(inventory_id) -> dict[str, int]:
         curr_booking = booking_dict[booking_id]
         pnr_score = 0
         pnr_score = pnr_score + int(curr_booking.pax_cnt) * 50
-        if curr_booking.cos_cd[0] in cabinF:
+        if curr_booking.cos_cd in cabinF:
             pnr_score = pnr_score + 1700
-        elif curr_booking.cos_cd[0] in cabinJ:
+        elif curr_booking.cos_cd in cabinJ:
             pnr_score = pnr_score + 2000
-        elif curr_booking.cos_cd[0] in cabinY:
+        elif curr_booking.cos_cd in cabinY:
             pnr_score = pnr_score + 1500
         pnr = curr_booking.recloc
         pnr_score = pnr_score + 750  # for class (should be checked further)
+
+
         pnr_score_dict[pnr] = pnr_score
+
 
     return pnr_score_dict
 
@@ -121,6 +127,15 @@ def get_ranked_affected_passenger_doc_ids(inventory_id) -> list[str]:
                 ssr_score = 200 * \
                     (str(passenger.ssr_code_cd1).count(
                         ",") + 1)
+            if len(str(passenger.tierlevel)) > 2:
+                if passenger.tierlevel == "Silver":
+                    ssr_score = ssr_score + 1500
+                elif passenger.tierlevel == "Gold":
+                    ssr_score = ssr_score + 1600
+                elif passenger.tierlevel == "Platinum":
+                    ssr_score = ssr_score + 1800
+                elif passenger.tierlevel == "PresidentialPlatinum":
+                    ssr_score = ssr_score + 1800
             affected_passengers_dict[passenger_doc_id] = ssr_score + pnr_score
 
     ranked_affected_passenger_doc_ids = sorted(affected_passengers_dict.keys(),
@@ -152,6 +167,15 @@ def get_avg_pnr_score(inventory_id) -> float:
                 ssr_score = 200 * \
                     (str(passenger.ssr_code_cd1).count(
                         ",") + 1)
+            if len(str(passenger.tierlevel)) > 2:
+                if passenger.tierlevel == "Silver":
+                    ssr_score = ssr_score + 1500
+                elif passenger.tierlevel == "Gold":
+                    ssr_score = ssr_score + 1600
+                elif passenger.tierlevel == "Platinum":
+                    ssr_score = ssr_score + 1800
+                elif passenger.tierlevel == "PresidentialPlatinum":
+                    ssr_score = ssr_score + 1800
             total_pnr_score = total_pnr_score + ssr_score + pnr_score
 
     return float(total_pnr_score/num_passengers)

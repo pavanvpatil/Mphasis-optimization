@@ -12,6 +12,7 @@ class Booking:
         action_cd: str,
         cos_cd: str,
         seg_seq: str,
+        seg_total: str,
         pax_cnt: str,
         carrier_cd: str,
         flt_num: str,
@@ -29,6 +30,7 @@ class Booking:
         self.action_cd: str = action_cd
         self.cos_cd: str = cos_cd
         self.seg_seq: str = seg_seq
+        self.seg_total: str= seg_total
         self.pax_cnt: str = pax_cnt
         self.carrier_cd: str = carrier_cd
         self.flt_num: str = flt_num
