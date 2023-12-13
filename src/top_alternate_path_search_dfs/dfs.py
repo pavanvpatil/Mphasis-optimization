@@ -40,7 +40,7 @@ def dfs(
     adjacency_list: dict[str, list[str]],
     visited_airport_codes: set[str],
     cur_path: list[str],
-    all_paths: set[str],
+    all_paths: list[list[str]],
     current_airport_code: str,
     destination_airport_code: str,
     depth: int,
@@ -65,17 +65,18 @@ def dfs(
     :rtype: None
     '''
 
-    if current_airport_code == destination_airport_code or depth == 4:
-        current_path_str = ",".join(cur_path)
-        all_paths.add(current_path_str)
+    if len(cur_path) > 0 and (current_airport_code == destination_airport_code or depth == 4):
+        all_paths.append(cur_path.copy())
+        return
+
+    if len(cur_path) > 0 and (current_airport_code not in adjacency_list):
+        all_paths.append(cur_path.copy())
         return
 
     visited_airport_codes.add(current_airport_code)
 
-    if current_airport_code not in adjacency_list:
-        current_path_str = ",".join(cur_path)
-        all_paths.add(current_path_str)
-        return
+    if len(cur_path) > 0:
+        all_paths.append(cur_path.copy())
 
     for inventory_id in adjacency_list[current_airport_code]:
 
@@ -84,13 +85,11 @@ def dfs(
 
         if next_airport_code not in visited_airport_codes:
 
-            if len(cur_path) > 0:
-                if not check_time_constraint(cur_path[-1], inventory_id):
-                    current_path_str = ",".join(cur_path)
-                    all_paths.add(current_path_str)
-                    continue
+            if len(cur_path) > 0 and (not check_time_constraint(cur_path[-1], inventory_id)):
+                continue
 
             cur_path.append(inventory_id)
+
             dfs(
                 adjacency_list=adjacency_list,
                 visited_airport_codes=visited_airport_codes,
@@ -100,6 +99,7 @@ def dfs(
                 destination_airport_code=destination_airport_code,
                 depth=depth+1
             )
+
             cur_path.pop()
 
     visited_airport_codes.remove(current_airport_code)
@@ -131,7 +131,7 @@ def init_dfs(
 
     visited_airport_codes: set[str] = set()
     cur_path: list[str] = []
-    all_paths: set[str] = set()
+    all_paths: list[list[str]] = []
 
     dfs(
         adjacency_list=adjacency_list,
@@ -145,5 +145,5 @@ def init_dfs(
 
     return get_top_alternate_paths(
         inventory_id_affected=inventory_id_affected,
-        all_paths=list(all_paths),
+        all_paths=all_paths,
         no_of_top_alternate_paths=3)

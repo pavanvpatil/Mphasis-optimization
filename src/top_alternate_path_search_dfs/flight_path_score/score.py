@@ -153,7 +153,7 @@ def get_alternate_flight_path_score(
 
 def get_top_alternate_paths(
     inventory_id_affected: str,
-    all_paths: list[str],
+    all_paths: list[list[str]],
     no_of_top_alternate_paths: int,
 ) -> list[tuple[list[str], float]]:
     '''Function to get the top 5 alternate paths based on the flight path score
@@ -169,8 +169,7 @@ def get_top_alternate_paths(
     '''
 
     alternate_paths = []
-    for path_str in all_paths:
-        path = path_str.split(',')
+    for path in all_paths:
         alternate_paths.append(
             (path, get_alternate_flight_path_score(inventory_id_affected=inventory_id_affected, path_inventory_ids=path)))
 
