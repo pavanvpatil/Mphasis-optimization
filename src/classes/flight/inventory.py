@@ -8,10 +8,13 @@ class Inventory:
             self,
         inventoryid: str,
         scheduleid: str,
+        carriercode: str,
+        dep_key: str,
         flightnumber: str,
         aircrafttype: str,
         departuredate: str,
-        arrivaldate: str,
+        departuredatetime: str,
+        arrivaldatetime: str,
         departureairport: str,
         arrivalairport: str,
         totalcapacity: str,
@@ -46,10 +49,13 @@ class Inventory:
     ):
         self.inventoryid = inventoryid
         self.scheduleid = scheduleid
+        self.carriercode = carriercode
+        self.dep_key = dep_key
         self.flightnumber = flightnumber
         self.aircrafttype = aircrafttype
         self.departuredate = departuredate
-        self.arrivaldate = arrivaldate
+        self.departuredatetime = departuredatetime
+        self.arrivaldatetime = arrivaldatetime
         self.departureairport = departureairport
         self.arrivalairport = arrivalairport
         self.totalcapacity = totalcapacity

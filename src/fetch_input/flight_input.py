@@ -2,9 +2,12 @@ import os
 from pandas import read_csv
 from dotenv import load_dotenv
 from datetime import datetime
+
+import src
 from src.classes.flight.schedule import Schedule
 from src.classes.flight.inventory import Inventory
-from src import inventory_dict, schedule_dict
+
+# from src import inventory_dict, schedule_dict
 
 load_dotenv()
 schedule_file_path = os.getenv("SCHEDULE_FILE_PATH")
@@ -51,12 +54,16 @@ def get_date_inventory_list_dict() -> dict[datetime, list[str]]:
     :rtype: dict[datetime, list[str]]
     '''
 
+    inventory_dict = src.inventory_dict
     date_inventory_list_dict: dict[datetime, list[str]] = {}
     sorted_inventory_list = sorted(inventory_dict.values(), key=lambda x: datetime.strptime(
-        x.departuredate + " " + schedule_dict[x.scheduleid].departuretime, "%m/%d/%Y %H:%M"))
+        x.departuredatetime, "%Y-%m-%d %H:%M:%S"))
 
     for inventory_obj in sorted_inventory_list:
-        date_inventory_list_dict[datetime.strptime(
-            inventory_obj.departuredate, "%m/%d/%Y")].append(inventory_obj.inventoryid)
+        if datetime.strptime(inventory_obj.departuredate, "%m/%d/%Y") in date_inventory_list_dict:
+            date_inventory_list_dict[datetime.strptime(
+                inventory_obj.departuredate, "%m/%d/%Y")].append(inventory_obj.inventoryid)
+        else:
+            date_inventory_list_dict[datetime.strptime(inventory_obj.departuredate, "%m/%d/%Y")] = [inventory_obj.inventoryid]
 
     return date_inventory_list_dict
