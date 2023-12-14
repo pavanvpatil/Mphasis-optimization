@@ -81,6 +81,8 @@ def initGUI():
             else:
                 pnr_ranking_vals["eco_class_score"] = 0
 
+            window.close()
+
             break
 
 
