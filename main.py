@@ -11,6 +11,7 @@ import time
 
 start_time = time.time()
 
+# affected inventory ids
 affected_inventories = [
     'INV-ZZ-2774494',
     'INV-ZZ-8029879',
@@ -74,13 +75,14 @@ for inventory_id in ranked_affected_inventories:
 
     # create solution object for this inventory and append to final solution list
     cur_res = AffectedInventorySolution(
-        inventory_id=inventory_id,
+        affected_inventory_id=inventory_id,
         accomodated_passengers=best_solutions[0][0],
         unaccomodated_passengers=unaccomodated_passengers,
         default_solution=best_solutions[0][1],
         other_solutions=[best_solutions[1][1], best_solutions[2][1]]
     )
 
+    # append to final solution list
     final_solution.append(cur_res)
 
 end_time = time.time()
