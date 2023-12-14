@@ -2,13 +2,9 @@ import os
 import json
 from pandas import read_csv
 from dotenv import load_dotenv
-from datetime import datetime
 
-import src
 from src.classes.flight.schedule import Schedule
 from src.classes.flight.inventory import Inventory
-
-# from src import inventory_dict, schedule_dict
 
 load_dotenv()
 schedule_file_path = os.getenv("SCHEDULE_FILE_PATH")
@@ -49,27 +45,3 @@ def get_inventory() -> dict[str, Inventory]:
         curr_inv['ec_cd'] = json.loads(curr_inv['ec_cd'].replace("'", '"'))
         inv_dict[curr_inv["inventoryid"]] = Inventory(**curr_inv)
     return inv_dict
-
-
-def get_date_inventory_list_dict() -> dict[datetime, list[str]]:
-    '''This function returns a dictionary of dates and inventory ids
-
-    :param None
-    :return: dictionary of dates and inventory ids
-    :rtype: dict[datetime, list[str]]
-    '''
-
-    inventory_dict = src.inventory_dict
-    date_inventory_list_dict: dict[datetime, list[str]] = {}
-    sorted_inventory_list = sorted(inventory_dict.values(), key=lambda x: datetime.strptime(
-        x.departuredatetime, "%d-%m-%Y %H:%M"))
-
-    for inventory_obj in sorted_inventory_list:
-        if datetime.strptime(inventory_obj.departuredate, "%m-%d-%Y") in date_inventory_list_dict:
-            date_inventory_list_dict[datetime.strptime(
-                inventory_obj.departuredate, "%m-%d-%Y")].append(inventory_obj.inventoryid)
-        else:
-            date_inventory_list_dict[datetime.strptime(
-                inventory_obj.departuredate, "%m-%d-%Y")] = [inventory_obj.inventoryid]
-
-    return date_inventory_list_dict

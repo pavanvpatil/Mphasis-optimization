@@ -1,5 +1,4 @@
 from src import inventory_dict
-from src import schedule_dict
 from src.top_alternate_path_search_dfs.create_graph import get_adjacency_list
 from src.top_alternate_path_search_dfs.flight_path_score.score import get_top_alternate_paths
 from src.inventory_edges.inventory_edges import get_inventory_edges
@@ -20,12 +19,6 @@ def check_time_constraint(inventory_id_prev: str, inventory_id_next: str) -> boo
 
     inventory_prev = inventory_dict[inventory_id_prev]
     inventory_next = inventory_dict[inventory_id_next]
-
-    # arrival_date = inventory_prev.arrivaldatetime
-    # departure_date = inventory_next.departuredate
-
-    # arrival_time = schedule_dict[inventory_prev.scheduleid].arrivaltime
-    # departure_time = schedule_dict[inventory_next.scheduleid].departuretime
 
     dt_arrival_date_time = datetime.strptime(
         inventory_prev.arrivaldatetime, '%d-%m-%Y %H:%M')

@@ -1,6 +1,6 @@
 from src.flight_geo import get_distance_from_airport_codes
 from src import inventory_dict
-from src import schedule_dict
+from src.gui.gui import flight_ranking_values_obj
 from datetime import datetime
 
 
@@ -9,7 +9,7 @@ def get_distance_score(
     final_airport_code: str,
 ) -> float:
     '''Function to calculate the distance score
-    score = 100 / (1 + (distance / 100)^2)
+    score = DIST_SCORE / (1 + (distance / 100)^2)
 
     :param destination_airport_code: destination airport code
     :type destination_airport_code: str
@@ -23,7 +23,7 @@ def get_distance_score(
         airport_code1=destination_airport_code,
         airport_code2=final_airport_code
     )
-    return float(100/(((distance / 100.0) ** 2) + 1))
+    return float(flight_ranking_values_obj.distance_score/(((distance / 100.0) ** 2) + 1))
 
 
 def get_arrival_time_score(
@@ -31,7 +31,7 @@ def get_arrival_time_score(
     inventory_id_proposed_arrival: str,
 ) -> float:
     '''Function to calculate the arrival time score
-    score = 70 / (1 + (arrival time difference / 10)^2)
+    score = ARR_SCORE / (1 + (arrival time difference / 10)^2)
 
     :param inventory_id_affected: inventory id of the affected flight
     :type inventory_id_affected: str
@@ -53,7 +53,7 @@ def get_arrival_time_score(
     arrival_time_difference: float = abs(
         (dt_affected_arrival_date_time - dt_proposed_arrival_date_time).total_seconds())
 
-    return float(70/(((arrival_time_difference / 36000) ** 2) + 1))
+    return float(flight_ranking_values_obj.arr_time_multiplier/(((arrival_time_difference / 36000) ** 2) + 1))
 
 
 def get_departure_time_score(
@@ -61,7 +61,7 @@ def get_departure_time_score(
     inventory_id_proposed_departure: str,
 ) -> float:
     '''Function to calculate the departure time score
-    score = 70 / (1 + (departure time difference / 10)^2)
+    score = DEP_SCORE / (1 + (departure time difference / 10)^2)
 
     :param inventory_id_affected: inventory id of the affected flight
     :type inventory_id_affected: str
@@ -83,12 +83,12 @@ def get_departure_time_score(
     departure_time_difference: float = abs(
         (dt_affected_departure_date_time - dt_proposed_departure_date_time).total_seconds())
 
-    return float(70/(((departure_time_difference / 36000) ** 2) + 1))
+    return float(flight_ranking_values_obj.arr_time_multiplier/(((departure_time_difference / 36000) ** 2) + 1))
 
 
 def get_equipment_score(inventory_id_affected: str, path_inventory_ids: list[str]) -> float:
     '''Function to calculate the equipment score
-    score = (x/n) * 50
+    score = (x/n) * EQUIP_SCORE
     where x is the number of flights with the same equipment as the affected flight
     and n is the total number of flights in the proposed sequence
 
@@ -109,7 +109,7 @@ def get_equipment_score(inventory_id_affected: str, path_inventory_ids: list[str
         if inventory_dict[inventory_id].aircrafttype == aircraft_type_affected:
             count_of_same_aircraft_type += 1
 
-    return float((count_of_same_aircraft_type/len(path_inventory_ids)) * 50)
+    return float((count_of_same_aircraft_type/len(path_inventory_ids)) * flight_ranking_values_obj.equipment_multiplier)
 
 
 def get_stop_over_score(
@@ -123,7 +123,8 @@ def get_stop_over_score(
     :return: stop over score
     :rtype: float
     '''
-    return -20.0 if path_inventory_ids_len > 1 else 0.0
+
+    return flight_ranking_values_obj.stop_over_score if path_inventory_ids_len > 1 else 0.0
 
 
 def get_alternate_flight_path_score(

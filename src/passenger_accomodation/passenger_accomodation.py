@@ -1,7 +1,5 @@
-from src.rank_pnrs import get_ranked_affected_passenger_doc_ids
 from src import inventory_dict, passenger_dict, booking_dict
 from src.classes.flight.inventory import Inventory
-from src.classes.pnr.passenger import Passenger
 import copy
 
 
