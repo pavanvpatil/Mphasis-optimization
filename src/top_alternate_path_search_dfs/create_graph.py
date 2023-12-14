@@ -27,6 +27,10 @@ def get_adjacency_list(
 
     for inventory_id in inventory_id_list:
         inventory = inventory_dict[inventory_id]
-        adjacency_list[inventory.departureairport].append(inventory_id)
+        if inventory.departureairport not in adjacency_list:
+            adjacency_list[inventory.departureairport] = []
+            adjacency_list[inventory.departureairport].append(inventory_id)
+        else:
+            adjacency_list[inventory.departureairport].append(inventory_id)
 
     return adjacency_list

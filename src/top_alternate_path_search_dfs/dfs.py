@@ -21,17 +21,17 @@ def check_time_constraint(inventory_id_prev: str, inventory_id_next: str) -> boo
     inventory_prev = inventory_dict[inventory_id_prev]
     inventory_next = inventory_dict[inventory_id_next]
 
-    arrival_date = inventory_prev.arrivaldate
-    departure_date = inventory_next.departuredate
+    # arrival_date = inventory_prev.arrivaldatetime
+    # departure_date = inventory_next.departuredate
 
-    arrival_time = schedule_dict[inventory_prev.scheduleid].arrivaltime
-    departure_time = schedule_dict[inventory_next.scheduleid].departuretime
+    # arrival_time = schedule_dict[inventory_prev.scheduleid].arrivaltime
+    # departure_time = schedule_dict[inventory_next.scheduleid].departuretime
 
     dt_arrival_date_time = datetime.strptime(
-        arrival_date + ' ' + arrival_time, '%Y-%m-%d %H:%M:%S')
+        inventory_prev.arrivaldatetime, '%d-%m-%Y %H:%M')
 
     dt_departure_date_time = datetime.strptime(
-        departure_date + ' ' + departure_time, '%Y-%m-%d %H:%M:%S')
+        inventory_next.departuredatetime, '%d-%m-%Y %H:%M')
 
     return (dt_departure_date_time - dt_arrival_date_time).total_seconds() >= 3600 and (dt_departure_date_time - dt_arrival_date_time).total_seconds() <= 43200
 
@@ -65,11 +65,18 @@ def dfs(
     :rtype: None
     '''
 
-    if current_airport_code == destination_airport_code or depth == 4:
+    if len(cur_path) > 0 and (current_airport_code == destination_airport_code or depth == 4):
+        all_paths.append(cur_path.copy())
+        return
+
+    if len(cur_path) > 0 and (current_airport_code not in adjacency_list):
         all_paths.append(cur_path.copy())
         return
 
     visited_airport_codes.add(current_airport_code)
+
+    if len(cur_path) > 0:
+        all_paths.append(cur_path.copy())
 
     for inventory_id in adjacency_list[current_airport_code]:
 
@@ -78,14 +85,13 @@ def dfs(
 
         if next_airport_code not in visited_airport_codes:
 
-            if len(cur_path) > 0:
-                if not check_time_constraint(cur_path[-1], inventory_id):
-                    all_paths.append(cur_path.copy())
-                    continue
+            if len(cur_path) > 0 and (not check_time_constraint(cur_path[-1], inventory_id)):
+                continue
 
             cur_path.append(inventory_id)
+
             dfs(
-                adjacendy_list=adjacency_list,
+                adjacency_list=adjacency_list,
                 visited_airport_codes=visited_airport_codes,
                 cur_path=cur_path,
                 all_paths=all_paths,
@@ -93,6 +99,7 @@ def dfs(
                 destination_airport_code=destination_airport_code,
                 depth=depth+1
             )
+
             cur_path.pop()
 
     visited_airport_codes.remove(current_airport_code)

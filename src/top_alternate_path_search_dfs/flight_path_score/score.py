@@ -9,7 +9,7 @@ def get_distance_score(
     final_airport_code: str,
 ) -> float:
     '''Function to calculate the distance score
-    score = 40 / (1 + (distance / 100)^2)
+    score = 100 / (1 + (distance / 100)^2)
 
     :param destination_airport_code: destination airport code
     :type destination_airport_code: str
@@ -20,10 +20,10 @@ def get_distance_score(
     '''
 
     distance = get_distance_from_airport_codes(
-        destination_airport_code=destination_airport_code,
-        final_airport_code=final_airport_code
+        airport_code1=destination_airport_code,
+        airport_code2=final_airport_code
     )
-    return float(40/(((distance / 100.0) ** 2) + 1))
+    return float(100/(((distance / 100.0) ** 2) + 1))
 
 
 def get_arrival_time_score(
@@ -44,17 +44,11 @@ def get_arrival_time_score(
     affected_inventory = inventory_dict[inventory_id_affected]
     proposed_departure_inventory = inventory_dict[inventory_id_proposed_arrival]
 
-    affected_arrival_date = affected_inventory.arrivaldate
-    proposed_arrival_date = proposed_departure_inventory.arrivaldate
-
-    affected_arrival_time = schedule_dict[affected_inventory.scheduleid].arrivaltime
-    proposed_arrival_time = schedule_dict[proposed_departure_inventory.scheduleid].arrivaltime
-
     dt_affected_arrival_date_time = datetime.strptime(
-        affected_arrival_date + ' ' + affected_arrival_time, '%Y-%m-%d %H:%M:%S')
+        affected_inventory.arrivaldatetime, '%d-%m-%Y %H:%M')
 
     dt_proposed_arrival_date_time = datetime.strptime(
-        proposed_arrival_date + ' ' + proposed_arrival_time, '%Y-%m-%d %H:%M:%S')
+        proposed_departure_inventory.arrivaldatetime, '%d-%m-%Y %H:%M')
 
     arrival_time_difference: float = abs(
         (dt_affected_arrival_date_time - dt_proposed_arrival_date_time).total_seconds())
@@ -80,17 +74,11 @@ def get_departure_time_score(
     affected_inventory = inventory_dict[inventory_id_affected]
     proposed_departure_inventory = inventory_dict[inventory_id_proposed_departure]
 
-    affected_departure_date = affected_inventory.departuredate
-    proposed_departure_date = proposed_departure_inventory.departuredate
-
-    affected_departure_time = schedule_dict[affected_inventory.scheduleid].departuretime
-    proposed_departure_time = schedule_dict[proposed_departure_inventory.scheduleid].departuretime
-
     dt_affected_departure_date_time = datetime.strptime(
-        affected_departure_date + ' ' + affected_departure_time, '%Y-%m-%d %H:%M:%S')
+        affected_inventory.departuredatetime, '%d-%m-%Y %H:%M')
 
     dt_proposed_departure_date_time = datetime.strptime(
-        proposed_departure_date + ' ' + proposed_departure_time, '%Y-%m-%d %H:%M:%S')
+        proposed_departure_inventory.departuredatetime, '%d-%m-%Y %H:%M')
 
     departure_time_difference: float = abs(
         (dt_affected_departure_date_time - dt_proposed_departure_date_time).total_seconds())

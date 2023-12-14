@@ -22,6 +22,7 @@ def get_pnr_passenger_input() -> dict[str, Passenger]:
     for index, row in pnr_passenger_df.iterrows():
         cur_passenger = pnr_passenger_df.iloc[index].to_dict()
         cur_passenger = {k.lower(): v for k, v in cur_passenger.items()}
+        cur_passenger["doc_id"] = str(int(cur_passenger["doc_id"]))
         passenger_dict[cur_passenger["doc_id"]] = Passenger(**cur_passenger)
     return passenger_dict
 
