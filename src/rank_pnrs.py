@@ -148,9 +148,9 @@ def get_avg_pnr_score(inventory_id) -> float:
     num_passengers = 0
     total_pnr_score = 0
     for passenger_doc_id in passenger_dict:
-        num_passengers = num_passengers + 1
         passenger = passenger_dict[passenger_doc_id]
         if passenger.recloc in pnr_score_dict:
+            num_passengers = num_passengers + 1
             pnr_score = pnr_score_dict[passenger.recloc]
             ssr_score = 0
             if len(str(passenger.ssr_code_cd1)) > 3:
