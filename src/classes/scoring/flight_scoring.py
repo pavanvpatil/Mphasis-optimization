@@ -15,3 +15,12 @@ class FlightScoringConfig:
         self.dep_time_multiplier = dep_time_multiplier
         self.equipment_multiplier = equipment_multiplier
         self.stop_over_score = stop_over_score
+
+    def __repr__(self) -> str:
+        return f'''
+        distance_score: {self.distance_score}
+        arr_time_multiplier: {self.arr_time_multiplier}
+        dep_time_multiplier: {self.dep_time_multiplier}
+        equipment_multiplier: {self.equipment_multiplier}
+        stop_over_score: {self.stop_over_score}
+        '''

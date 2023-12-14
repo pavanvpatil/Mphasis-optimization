@@ -4,15 +4,18 @@ from src.rank_pnrs import get_ranked_affected_passenger_doc_ids
 from src.rank_affected_inventory import get_rank_affected_inventories
 from src.top_alternate_path_search_dfs.dfs import init_dfs
 from src import inventory_dict
-from src.GUI.gui import initGUI
+from src.gui.gui import initGUI
+from src.gui.gui import pnr_ranking_values_obj
+from src.gui.gui import flight_ranking_values_obj
 
 # default imports
 import time
 
+# GUI interface for changing ranking scores for alternate flight path and PNR + passenger ranking
+initGUI()
 
-#to change ranking values
-#initGUI()
-
+print(pnr_ranking_values_obj)
+print(flight_ranking_values_obj)
 
 start_time = time.time()
 

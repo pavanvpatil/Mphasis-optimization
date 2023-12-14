@@ -8,6 +8,7 @@ airport_codes_file_path = os.getenv("AIRPORT_CODES_FILE_PATH")
 
 airport_codes_df = read_csv(airport_codes_file_path)
 
+
 def get_airport_city_codes() -> dict[str, str]:
     '''Returns a dictionary of airport codes to city names
 
@@ -19,9 +20,11 @@ def get_airport_city_codes() -> dict[str, str]:
     airport_code_to_city_dict = {}
     for index, row in airport_codes_df.iterrows():
         cur_airport = airport_codes_df.iloc[index].to_dict()
-        airport_code_to_city_dict[cur_airport["airport_code"]] = cur_airport["city_name"]
+        airport_code_to_city_dict[cur_airport["airport_code"]
+                                  ] = cur_airport["city_name"]
 
     return airport_code_to_city_dict
+
 
 def get_airport_info() -> dict[str, AirportInfo]:
     '''Returns a dictionary of airport codes to airport information
@@ -34,6 +37,7 @@ def get_airport_info() -> dict[str, AirportInfo]:
     airport_info_dict = {}
     for index, row in airport_codes_df.iterrows():
         cur_airport = airport_codes_df.iloc[index].to_dict()
-        airport_info_dict[cur_airport["airport_code"]] = AirportInfo(**cur_airport)
+        airport_info_dict[cur_airport["airport_code"]
+                          ] = AirportInfo(**cur_airport)
 
     return airport_info_dict
