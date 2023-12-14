@@ -36,9 +36,9 @@ def initGUI() -> None:
         [
             psg.Text(
                 text="PNR Ranking Scoring",
-                size=(50, 1),
+                size=(None, 1),
                 justification="center",
-                font=("Helvetica", 25),
+                font=("Helvetica", 15),
                 background_color="white",
                 text_color="black",
                 relief=psg.RELIEF_RIDGE,
@@ -72,9 +72,9 @@ def initGUI() -> None:
         [
             psg.Text(
                 text="Flight Scoring",
-                size=(50, 1),
+                size=(None, 1),
                 justification="center",
-                font=("Helvetica", 25),
+                font=("Helvetica", 15),
                 background_color="white",
                 text_color="black",
                 relief=psg.RELIEF_RIDGE,
@@ -93,10 +93,9 @@ def initGUI() -> None:
     layout.append([psg.Checkbox("Stop Over Score", default=True, key='stop_over_score_check', size=(
         30, 1)), psg.Input("-20", key='stop_over_score')])
 
-    layout.append([psg.Button("SAVE", key='save', size=(100, 2))])
+    layout.append([psg.Button("SAVE", key='save', size=(None, 1), pad=10 )])
 
-    window = psg.Window("PNR and Flight Scoring Configuration",
-                        layout, size=(1000, 800))
+    window = psg.Window("Mphasis Optimization Tool", element_justification="center", layout=layout, resizable=True)
 
     while True:
         event, values = window.read()
