@@ -4,9 +4,14 @@ from src.rank_pnrs import get_ranked_affected_passenger_doc_ids
 from src.rank_affected_inventory import get_rank_affected_inventories
 from src.top_alternate_path_search_dfs.dfs import init_dfs
 from src import inventory_dict
+from src.GUI.gui import initGUI
 
 # default imports
 import time
+
+
+#to change ranking values
+#initGUI()
 
 
 start_time = time.time()
