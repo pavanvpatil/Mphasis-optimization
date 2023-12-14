@@ -9,7 +9,7 @@ def get_distance_score(
     final_airport_code: str,
 ) -> float:
     '''Function to calculate the distance score
-    score = 40 / (1 + (distance / 100)^2)
+    score = 100 / (1 + (distance / 100)^2)
 
     :param destination_airport_code: destination airport code
     :type destination_airport_code: str
@@ -23,7 +23,7 @@ def get_distance_score(
         airport_code1=destination_airport_code,
         airport_code2=final_airport_code
     )
-    return float(40/(((distance / 100.0) ** 2) + 1))
+    return float(100/(((distance / 100.0) ** 2) + 1))
 
 
 def get_arrival_time_score(

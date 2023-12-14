@@ -14,10 +14,6 @@ def get_affected_pnrs(inventory_id: str) -> set[str]:
     '''
 
     affected_pnrs = set()
-    schedule_id = inventory_dict[inventory_id].scheduleid
-    flight_number = schedule_dict[schedule_id].flightnumber
-    carrier_code = schedule_dict[schedule_id].carriercode
-    dep_date = inventory_dict[inventory_id].departuredate
     dep_key = inventory_dict[inventory_id].dep_key[0: -2]
 
     for booking_id in booking_dict:
@@ -37,11 +33,6 @@ def get_affected_bookings(inventory_id: str) -> set[str]:
     '''
 
     affected_bookings = set()
-    schedule_id = inventory_dict[inventory_id].scheduleid
-    flight_no = schedule_dict[schedule_id].flightnumber
-    carrier_code = schedule_dict[schedule_id].carriercode
-    dep_date = inventory_dict[inventory_id].departuredate
-
     dep_key = inventory_dict[inventory_id].dep_key[0: -2]
 
     for booking_id in booking_dict:
@@ -96,11 +87,10 @@ def get_pnr_score_dict(inventory_id) -> dict[str, int]:
         elif curr_booking.cos_cd in cabinY:
             pnr_score = pnr_score + 1500
         pnr = curr_booking.recloc
+
         pnr_score = pnr_score + 750  # for class (should be checked further)
 
-
         pnr_score_dict[pnr] = pnr_score
-
 
     return pnr_score_dict
 

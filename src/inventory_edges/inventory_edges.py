@@ -23,16 +23,26 @@ def get_inventory_edges(inventory_id_affected: str) -> list[str]:
     list_of_valid_inventory_ids = []
 
     for inventory_id in date_inventory_list_dict[list_of_valid_dates[0]]:
+        if inventory_dict[inventory_id].is_affected == True:
+            continue
         curr_inventory_departure_time = datetime.strptime(
             schedule_dict[inventory_dict[inventory_id].scheduleid].departuretime, '%H:%M').time()
         if curr_inventory_departure_time >= departure_time and inventory_id != inventory_id_affected:
             list_of_valid_inventory_ids.append(inventory_id)
 
-    list_of_valid_inventory_ids = list_of_valid_inventory_ids + \
-        date_inventory_list_dict[list_of_valid_dates[1]].copy() + \
-        date_inventory_list_dict[list_of_valid_dates[2]].copy()
+    for inventory_id in date_inventory_list_dict[list_of_valid_dates[1]]:
+        if inventory_dict[inventory_id].is_affected == True:
+            continue
+        list_of_valid_inventory_ids.append(inventory_id)
+
+    for inventory_id in date_inventory_list_dict[list_of_valid_dates[2]]:
+        if inventory_dict[inventory_id].is_affected == True:
+            continue
+        list_of_valid_inventory_ids.append(inventory_id)
 
     for inventory_id in date_inventory_list_dict[list_of_valid_dates[3]]:
+        if inventory_dict[inventory_id].is_affected == True:
+            continue
         curr_inventory_departure_time = datetime.strptime(
             schedule_dict[inventory_dict[inventory_id].scheduleid].departuretime, '%H:%M').time()
         if curr_inventory_departure_time <= departure_time:
