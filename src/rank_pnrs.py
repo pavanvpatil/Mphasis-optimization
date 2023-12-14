@@ -2,7 +2,7 @@ from src import schedule_dict
 from src import inventory_dict
 from src import booking_dict
 from src import passenger_dict
-from src.GUI.gui import pnr_ranking_vals
+from src.GUI.gui import get_pnr_ranking_values
 
 
 def get_affected_pnrs(inventory_id: str) -> set[str]:
@@ -70,6 +70,8 @@ def get_pnr_score_dict(inventory_id) -> dict[str, int]:
     :return: dictionary of pnr_score of affected pnrs
     :rtype: dict[str, int]
     '''
+
+    pnr_ranking_vals = get_pnr_ranking_values()
     cabinJ = ["BusinessClass"]
     cabinF = ["FirstClass"]
     cabinY = ["EconomyClass", "PremiumEconomyClass"]
@@ -80,13 +82,13 @@ def get_pnr_score_dict(inventory_id) -> dict[str, int]:
     for booking_id in affected_booking_ids:
         curr_booking = booking_dict[booking_id]
         pnr_score = 0
-        pnr_score = pnr_score + int(curr_booking.pax_cnt) * pnr_ranking_vals["pax_cnt_score"]
+        pnr_score = pnr_score + int(curr_booking.pax_cnt) * pnr_ranking_vals.pax_cnt_score
         if curr_booking.cos_cd in cabinF:
-            pnr_score = pnr_score + pnr_ranking_vals["first_class_score"]
+            pnr_score = pnr_score + pnr_ranking_vals.first_class_score
         elif curr_booking.cos_cd in cabinJ:
-            pnr_score = pnr_score + pnr_ranking_vals["business_class_score"]
+            pnr_score = pnr_score + pnr_ranking_vals.business_class_score
         elif curr_booking.cos_cd in cabinY:
-            pnr_score = pnr_score + pnr_ranking_vals["eco_class_score"]
+            pnr_score = pnr_score + pnr_ranking_vals.eco_class_score
         pnr = curr_booking.recloc
 
         pnr_score = pnr_score + 750  # for class (should be checked further)
@@ -105,6 +107,8 @@ def get_ranked_affected_passenger_doc_ids(inventory_id) -> list[str]:
     return list of doc_id of passengers ranked as per pnr_score (highest score will be the first element)
     rtype : list[str]
     '''
+    pnr_ranking_vals = get_pnr_ranking_values()
+
 
     pnr_score_dict = get_pnr_score_dict(inventory_id)
 
@@ -115,18 +119,18 @@ def get_ranked_affected_passenger_doc_ids(inventory_id) -> list[str]:
             pnr_score = pnr_score_dict[passenger.recloc]
             ssr_score = 0
             if len(str(passenger.ssr_code_cd1)) > 3:
-                ssr_score = pnr_ranking_vals["ssr_score"] * \
+                ssr_score = pnr_ranking_vals.ssr_score * \
                     (str(passenger.ssr_code_cd1).count(
                         ",") + 1)
             if len(str(passenger.tierlevel)) > 2:
                 if passenger.tierlevel == "Silver":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_silver"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_silver
                 elif passenger.tierlevel == "Gold":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_gold"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_gold
                 elif passenger.tierlevel == "Platinum":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_platinum"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_platinum
                 elif passenger.tierlevel == "PresidentialPlatinum":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_pplatinum"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_pplatinum
             affected_passengers_dict[passenger_doc_id] = ssr_score + pnr_score
 
     ranked_affected_passenger_doc_ids = sorted(affected_passengers_dict.keys(),
@@ -144,6 +148,9 @@ def get_avg_pnr_score(inventory_id) -> float:
     :rtype float
     '''
 
+    pnr_ranking_vals = get_pnr_ranking_values()
+
+
     pnr_score_dict = get_pnr_score_dict(inventory_id)
 
     num_passengers = 0
@@ -155,18 +162,18 @@ def get_avg_pnr_score(inventory_id) -> float:
             pnr_score = pnr_score_dict[passenger.recloc]
             ssr_score = 0
             if len(str(passenger.ssr_code_cd1)) > 3:
-                ssr_score = pnr_ranking_vals["ssr_score"] * \
+                ssr_score = pnr_ranking_vals.ssr_score * \
                     (str(passenger.ssr_code_cd1).count(
                         ",") + 1)
             if len(str(passenger.tierlevel)) > 2:
                 if passenger.tierlevel == "Silver":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_silver"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_silver
                 elif passenger.tierlevel == "Gold":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_gold"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_gold
                 elif passenger.tierlevel == "Platinum":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_platinum"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_platinum
                 elif passenger.tierlevel == "PresidentialPlatinum":
-                    ssr_score = ssr_score + pnr_ranking_vals["loyalties_pplatinum"]
+                    ssr_score = ssr_score + pnr_ranking_vals.loyalties_pplatinum
             total_pnr_score = total_pnr_score + ssr_score + pnr_score
 
     return float(total_pnr_score/num_passengers)
