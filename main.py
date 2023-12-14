@@ -4,10 +4,10 @@ from src.rank_pnrs import get_ranked_affected_passenger_doc_ids
 from src.rank_affected_inventory import get_rank_affected_inventories
 from src.top_alternate_path_search_dfs.dfs import init_dfs
 from src import inventory_dict
+from src.classes.output.affected_inventory_sol import AffectedInventorySolution
 
 # default imports
 import time
-
 
 start_time = time.time()
 
@@ -47,26 +47,41 @@ ranked_affected_inventories = get_rank_affected_inventories(
     affected_inventory_ids=affected_inventories
 )
 
-print('------------------')
+final_solution: list[AffectedInventorySolution] = []
 
 for inventory_id in ranked_affected_inventories:
 
+    # initialize dfs for this inventory and get top alternate paths
     top_alternate_paths = init_dfs(inventory_id)
 
+    # get ranked affected passengers for this inventory sorted according to their passenger score
     ranked_affected_passengers_doc_ids = get_ranked_affected_passenger_doc_ids(
         inventory_id=inventory_id
     )
 
-    op = accomodate_passengers(
+    # solution list after accomodating passengers for this inventory in each of the top 3 alternate paths
+    best_solutions = accomodate_passengers(
         ranked_affected_passengers_doc_ids=ranked_affected_passengers_doc_ids,
         affected_inventory_id=inventory_id,
         top_alternate_paths=top_alternate_paths
     )
 
-    print(inventory_id)
-    print(len(op[0][0]))
-    print(len(ranked_affected_passengers_doc_ids))
-    print('------------------')
+    accomodate_passengers_set = set(best_solutions[0][0])
+    unaccomodated_passengers = []
+    for passenger_doc_id in ranked_affected_passengers_doc_ids:
+        if passenger_doc_id not in accomodate_passengers_set:
+            unaccomodated_passengers.append(passenger_doc_id)
+
+    # create solution object for this inventory and append to final solution list
+    cur_res = AffectedInventorySolution(
+        inventory_id=inventory_id,
+        accomodated_passengers=best_solutions[0][0],
+        unaccomodated_passengers=unaccomodated_passengers,
+        default_solution=best_solutions[0][1],
+        other_solutions=[best_solutions[1][1], best_solutions[2][1]]
+    )
+
+    final_solution.append(cur_res)
 
 end_time = time.time()
 
