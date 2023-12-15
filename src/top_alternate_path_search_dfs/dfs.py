@@ -3,6 +3,7 @@ from src.top_alternate_path_search_dfs.create_graph import get_adjacency_list
 from src.top_alternate_path_search_dfs.flight_path_score.score import get_top_alternate_paths
 from src.inventory_edges.inventory_edges import get_inventory_edges
 from src.top_alternate_path_search_dfs.select_source import select_min_source
+from src.gui.gui import flight_ranking_values_obj
 from datetime import datetime
 
 
@@ -58,7 +59,7 @@ def dfs(
     :rtype: None
     '''
 
-    if len(cur_path) > 0 and (current_airport_code == destination_airport_code or depth == 4):
+    if len(cur_path) > 0 and (current_airport_code == destination_airport_code or depth == flight_ranking_values_obj.max_dowline_flights - 1):
         all_paths.append(cur_path.copy())
         return
 
@@ -139,4 +140,4 @@ def init_dfs(
     return get_top_alternate_paths(
         inventory_id_affected=inventory_id_affected,
         all_paths=all_paths,
-        no_of_top_alternate_paths=3)
+        no_of_top_alternate_paths=flight_ranking_values_obj.no_of_top_flights)
