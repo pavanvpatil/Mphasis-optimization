@@ -19,7 +19,9 @@ flight_ranking_values_obj = FlightScoringConfig(
     arr_time_multiplier=70,
     dep_time_multiplier=70,
     equipment_multiplier=50,
-    stop_over_score=-20
+    stop_over_score=-20,
+    max_downline_flights=3,
+    no_of_top_flights=3
 )
 
 
@@ -82,18 +84,20 @@ def initGUI() -> None:
         ]
     )
 
-    layout.append([psg.Checkbox("Distance Score Multiplier", default=True, key='distance_score_check', size=(30, 1)),
+    layout.append([psg.Checkbox("Distance Score Multiplier", default=True, key='distance_score_check', size=(30, 1), enable_events=True),
                    psg.Input("100", key='distance_score', enable_events=True)])
     layout.append([psg.Checkbox("Arrival Time Score Multiplier", default=True,
-                  key='arr_time_multiplier_check', size=(30, 1)), psg.Input("70", key='arr_time_multiplier')])
+                  key='arr_time_multiplier_check', size=(30, 1), enable_events=True), psg.Input("70", key='arr_time_multiplier', enable_events=True)])
     layout.append(
-        [psg.Checkbox("Departure Time Score Multiplier", default=True, key='dep_time_multiplier_check', size=(30, 1)), psg.Input("70", key='dep_time_multiplier')])
+        [psg.Checkbox("Departure Time Score Multiplier", default=True, key='dep_time_multiplier_check', size=(30, 1), enable_events=True), psg.Input("70", key='dep_time_multiplier', enable_events=True)])
     layout.append([psg.Checkbox("Equipment Score Multiplier", default=True,
-                  key='equipment_score_check', size=(30, 1)), psg.Input("50", key='equipment_multiplier')])
+                  key='equipment_score_check', size=(30, 1), enable_events=True), psg.Input("50", key='equipment_multiplier', enable_events=True)])
     layout.append([psg.Checkbox("Stop Over Score", default=True, key='stop_over_score_check', size=(
-        30, 1)), psg.Input("-20", key='stop_over_score')])
+        30, 1),enable_events=True), psg.Input("-20", key='stop_over_score',enable_events=True)])
+    layout.append([psg.Text("Maximum number of dowline flights",size=(32,1), enable_events=True), psg.Input("3",key='max_downline_flights', enable_events=True)])
+    layout.append([psg.Text("Number of top flights considered",size=(32,1), enable_events=True), psg.Input("3",key='no_of_top_flights', enable_events=True)])
 
-    layout.append([psg.Button("SAVE", key='save', size=(None, 1), pad=10 )])
+    layout.append([psg.Button("SAVE", key='save', size=(None, 1), pad=10)])
 
     window = psg.Window("Mphasis Optimization Tool", element_justification="center", layout=layout, resizable=True)
 
@@ -184,6 +188,8 @@ def initGUI() -> None:
                     values['stop_over_score'])
             else:
                 flight_ranking_values_obj.stop_over_score = 0.0
+            flight_ranking_values_obj.no_of_top_flights = int(values['no_of_top_flights'])
+            flight_ranking_values_obj.max_dowline_flights = int(values['max_downline_flights'])
 
             window.close()
             break
