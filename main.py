@@ -7,6 +7,7 @@ from src import inventory_dict
 from src.classes.output.affected_inventory_sol import AffectedInventorySolution
 from src.output.output_to_csv import output_to_csv
 from src.gui.gui import initGUI
+from src.mail_service.mailing import driver_send_mail
 
 # default imports
 import time
@@ -14,6 +15,7 @@ import time
 # GUI interface for changing ranking scores for alternate flight path and PNR + passenger ranking
 initGUI()
 
+print("Processing...")
 start_time = time.time()
 
 # affected inventory ids
@@ -89,9 +91,15 @@ for inventory_id in ranked_affected_inventories:
     # append to final solution list
     final_solutions.append(current_final_solution)
 
-# output to csv
-output_to_csv(final_solutions=final_solutions)
-
 end_time = time.time()
+print("Process ended in ", end_time - start_time, " seconds")
 
-print("Ended in ", end_time - start_time, " seconds")
+# output to csv
+print("Creating output csv file in final_solution folder")
+output_to_csv(final_solutions=final_solutions)
+print("Created output csv file in final_solution folder")
+
+# send mail to passengers
+print("Sending mail to passengers")
+driver_send_mail(final_solutions=final_solutions)
+print("Sent mail to passengers")
