@@ -251,9 +251,15 @@ def driver_send_mail(final_solutions: list[AffectedInventorySolution]) -> None:
             receivers_address_default.append(
                 passenger_dict[passenger_doc_id].contact_email
             )
-        mail_message_default = create_mime_text_for_default_solution(
-            solution_path=solution.default_solution
-        )
+        if len(solution.default_solution) != 0:
+            mail_message_default = create_mime_text_for_default_solution(
+                solution_path=solution.default_solution
+            )
+        else:
+            mail_message_default = MIMEText(
+                """Dear Passenger,\nWe regret to inform you that your flight has been cancelled due to unforeseen circumstances.\nNo alternate flight path available
+                Sorry for the inconvenience caused.\nBest regards"""
+            )
         send_mails_bulk(
             receivers_address=receivers_address_default,
             mail_message=mail_message_default,
@@ -264,9 +270,15 @@ def driver_send_mail(final_solutions: list[AffectedInventorySolution]) -> None:
             receivers_address_other.append(
                 passenger_dict[passenger_doc_id].contact_email
             )
-        mail_message_other = create_mime_text_for_other_solutions(
-            other_solution_paths=solution.other_solutions
-        )
+        if(len(solution.other_solutions) != 0):
+            mail_message_other = create_mime_text_for_other_solutions(
+                other_solution_paths=solution.other_solutions
+            )
+        else:
+            mail_message_other = MIMEText(
+                """Dear Passenger,\nWe regret to inform you that your flight has been cancelled due to unforeseen circumstances.\nNo alternate flight path available
+                Sorry for the inconvenience caused.\nBest regards"""
+            )
         send_mails_bulk(
             receivers_address=receivers_address_other, mail_message=mail_message_other
         )
