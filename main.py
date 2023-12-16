@@ -15,10 +15,11 @@ import time
 
 affected_inventories = get_affected_inventory_ids()
 
-print("Processing...")
 
 # GUI interface for changing ranking scores for alternate flight path and PNR + passenger ranking
 initGUI()
+
+print("Processing...")
 
 start_time = time.time()
 
@@ -33,7 +34,7 @@ final_solutions: list[AffectedInventorySolution] = []
 
 for inventory_id in ranked_affected_inventories:
     # initialize dfs for this inventory and get top alternate paths
-    top_alternate_paths = init_dfs(inventory_id)        
+    top_alternate_paths = init_dfs(inventory_id)
 
     # get ranked affected passengers for this inventory sorted according to their passenger score
     ranked_affected_passengers_doc_ids = get_ranked_affected_passenger_doc_ids(
@@ -73,7 +74,8 @@ for inventory_id in ranked_affected_inventories:
         accomodated_passengers=best_solutions[0][0],
         unaccomodated_passengers=unaccomodated_passengers,
         default_solution=best_solutions[0][1],
-        other_solutions=[best_solutions[i][1] for i in range(1, len(best_solutions))] if len(best_solutions) > 1 else [],
+        other_solutions=[best_solutions[i][1] for i in range(
+            1, len(best_solutions))] if len(best_solutions) > 1 else [],
     )
 
     # append to final solution list
