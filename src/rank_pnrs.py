@@ -70,9 +70,10 @@ def get_pnr_score_dict(inventory_id) -> dict[str, int]:
     :rtype: dict[str, int]
     '''
 
-    cabinJ = ["BusinessClass"]
+    cabinB = ["BusinessClass"]
     cabinF = ["FirstClass"]
-    cabinY = ["EconomyClass", "PremiumEconomyClass"]
+    cabinPE = ["PremiumEconomyClass"]
+    cabinE = ["EconomyClass"]
 
     pnr_score_dict = {}
     affected_booking_ids = get_affected_bookings(inventory_id)
@@ -80,17 +81,22 @@ def get_pnr_score_dict(inventory_id) -> dict[str, int]:
     for booking_id in affected_booking_ids:
         curr_booking = booking_dict[booking_id]
         pnr_score = 0
+
         pnr_score = pnr_score + \
             int(curr_booking.pax_cnt) * pnr_ranking_values_obj.pax_cnt_score
+
         if curr_booking.cos_cd in cabinF:
             pnr_score = pnr_score + pnr_ranking_values_obj.first_class_score
-        elif curr_booking.cos_cd in cabinJ:
+        elif curr_booking.cos_cd in cabinB:
             pnr_score = pnr_score + pnr_ranking_values_obj.business_class_score
-        elif curr_booking.cos_cd in cabinY:
+        elif curr_booking.cos_cd in cabinPE:
+            pnr_score = pnr_score + \
+                pnr_ranking_values_obj.premium_eco_class_score
+        elif curr_booking.cos_cd in cabinE:
             pnr_score = pnr_score + pnr_ranking_values_obj.eco_class_score
         pnr = curr_booking.recloc
 
-        pnr_score = pnr_score + 750  # for class (should be checked further)
+        pnr_score = pnr_score + 750
 
         pnr_score_dict[pnr] = pnr_score
 
