@@ -119,6 +119,9 @@ def init_dfs(
         inventory_id_list=inventory_id_list
     )
 
+    if(len(adjacency_list) == 0):
+        return []
+
     affected_inventory = inventory_dict[inventory_id_affected]
     source_airport_code = select_min_source(adjacency_list=adjacency_list,
                                             inventory_id_affected=inventory_id_affected)
