@@ -39,11 +39,11 @@ def send_mails_bulk(receivers_address: list[str], mail_message: MIMEText) -> Non
 
             if (batch + 1) * bcc_limit >= len(receivers_address):
                 em["Bcc"] = receivers_address[
-                    batch * bcc_limit : len(receivers_address)
+                    batch * bcc_limit: len(receivers_address)
                 ]
             else:
                 em["Bcc"] = receivers_address[
-                    batch * bcc_limit : ((batch + 1) * bcc_limit)
+                    batch * bcc_limit: ((batch + 1) * bcc_limit)
                 ]
 
             with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
@@ -199,7 +199,8 @@ def create_mime_text_for_other_solutions(
             <div class="path-connecting-flights"> """
 
     for index_1 in range(len(other_solution_paths)):
-        html = html + f"""<p><strong>Alternate Flight Path{index_1+1}:</strong></p> """
+        html = html + \
+            f"""<p><strong>Alternate Flight Path{index_1+1}:</strong></p> """
         for index_2 in range(len(other_solution_paths[index_1])):
             html = (
                 html
@@ -258,7 +259,7 @@ def driver_send_mail(final_solutions: list[AffectedInventorySolution]) -> None:
         else:
             mail_message_default = MIMEText(
                 """Dear Passenger,\nWe regret to inform you that your flight has been cancelled due to unforeseen circumstances.\nNo alternate flight path available
-                Sorry for the inconvenience caused.\nBest regards"""
+                Sorry for the inconvenience caused.\nBest regards""", 'text'
             )
         send_mails_bulk(
             receivers_address=receivers_address_default,
@@ -270,14 +271,14 @@ def driver_send_mail(final_solutions: list[AffectedInventorySolution]) -> None:
             receivers_address_other.append(
                 passenger_dict[passenger_doc_id].contact_email
             )
-        if(len(solution.other_solutions) != 0):
+        if (len(solution.other_solutions) != 0):
             mail_message_other = create_mime_text_for_other_solutions(
                 other_solution_paths=solution.other_solutions
             )
         else:
             mail_message_other = MIMEText(
                 """Dear Passenger,\nWe regret to inform you that your flight has been cancelled due to unforeseen circumstances.\nNo alternate flight path available
-                Sorry for the inconvenience caused.\nBest regards"""
+                Sorry for the inconvenience caused.\nBest regards""", 'text'
             )
         send_mails_bulk(
             receivers_address=receivers_address_other, mail_message=mail_message_other

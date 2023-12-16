@@ -5,6 +5,7 @@ from src.inventory_edges.inventory_edges import get_inventory_edges
 from src.top_alternate_path_search_dfs.select_source import select_min_source
 from src.gui.gui import flight_ranking_values_obj
 from datetime import datetime
+from src.gui.gui import flight_ranking_values_obj
 
 
 def check_time_constraint(inventory_id_prev: str, inventory_id_next: str) -> bool:
@@ -27,7 +28,7 @@ def check_time_constraint(inventory_id_prev: str, inventory_id_next: str) -> boo
     dt_departure_date_time = datetime.strptime(
         inventory_next.departuredatetime, '%d-%m-%Y %H:%M')
 
-    return (dt_departure_date_time - dt_arrival_date_time).total_seconds() >= 3600 and (dt_departure_date_time - dt_arrival_date_time).total_seconds() <= 43200
+    return (dt_departure_date_time - dt_arrival_date_time).total_seconds() >= flight_ranking_values_obj.min_connection_time_hrs * 3600 and (dt_departure_date_time - dt_arrival_date_time).total_seconds() <= flight_ranking_values_obj.max_connection_time_hrs * 3600
 
 
 def dfs(
@@ -59,7 +60,7 @@ def dfs(
     :rtype: None
     '''
 
-    if len(cur_path) > 0 and (current_airport_code == destination_airport_code or depth == flight_ranking_values_obj.max_dowline_flights - 1):
+    if len(cur_path) > 0 and (current_airport_code == destination_airport_code or depth == flight_ranking_values_obj.max_dowline_flights):
         all_paths.append(cur_path.copy())
         return
 
@@ -143,4 +144,4 @@ def init_dfs(
     return get_top_alternate_paths(
         inventory_id_affected=inventory_id_affected,
         all_paths=all_paths,
-        no_of_top_alternate_paths=flight_ranking_values_obj.no_of_top_flights)
+        no_of_top_alternate_paths=min(flight_ranking_values_obj.no_of_top_flights, len(all_paths)))
