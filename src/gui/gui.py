@@ -60,7 +60,8 @@ def initGUI() -> None:
                 enable_events=True,
                 size=(30, 2),
             ),
-            psg.Input("2000", key="loyalties_pplatinum_score", enable_events=True),
+            psg.Input("2000", key="loyalties_pplatinum_score",
+                      enable_events=True),
         ]
     )
 
@@ -73,7 +74,8 @@ def initGUI() -> None:
                 enable_events=True,
                 size=(30, 1),
             ),
-            psg.Input("1800", key="loyalties_platinum_score", enable_events=True),
+            psg.Input("1800", key="loyalties_platinum_score",
+                      enable_events=True),
         ]
     )
 
@@ -99,7 +101,8 @@ def initGUI() -> None:
                 enable_events=True,
                 size=(30, 1),
             ),
-            psg.Input("1500", key="loyalties_silver_score", enable_events=True),
+            psg.Input("1500", key="loyalties_silver_score",
+                      enable_events=True),
         ]
     )
 
@@ -160,7 +163,8 @@ def initGUI() -> None:
                 enable_events=True,
                 size=(30, 1),
             ),
-            psg.Input("1650", key="premium_eco_class_score", enable_events=True),
+            psg.Input("1650", key="premium_eco_class_score",
+                      enable_events=True),
         ]
     )
 
@@ -316,7 +320,9 @@ def initGUI() -> None:
     )
 
     while True:
+
         event, values = window.read()
+
         if event == psg.WIN_CLOSED or event == "save":
             if values["loyalties_pplatinum"]:
                 pnr_ranking_values_obj.loyalties_pplatinum = float(
@@ -352,7 +358,8 @@ def initGUI() -> None:
                 pnr_ranking_values_obj.ssr_score = 0.0
 
             if values["pax_cnt"]:
-                pnr_ranking_values_obj.pax_cnt_score = float(values["pax_cnt_score"])
+                pnr_ranking_values_obj.pax_cnt_score = float(
+                    values["pax_cnt_score"])
             else:
                 pnr_ranking_values_obj.pax_cnt_score = 0.0
 
@@ -443,46 +450,63 @@ def initGUI() -> None:
                 flight_ranking_values_obj.max_connection_time_hrs
                 < flight_ranking_values_obj.min_connection_time_hrs
             ):
-                psg.popup(
+                value = psg.popup(
                     "Maximum connection time cannot be less than minimum connection time",
                     button_type=psg.POPUP_BUTTONS_OK,
                 )
-                continue
+                if value == "OK" or value == None:
+                    continue
 
             if (
                 flight_ranking_values_obj.max_connection_time_hrs < 0
                 or flight_ranking_values_obj.min_connection_time_hrs < 0
             ):
-                psg.popup("Connection time cannot be negative")
-                continue
+                value = psg.popup(
+                    "Connection time cannot be negative", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if flight_ranking_values_obj.max_dowline_flights <= 0:
-                psg.popup("Maximum downline flights must be greater than 0")
-                continue
+                value = psg.popup(
+                    "Maximum downline flights must be greater than 0", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if flight_ranking_values_obj.no_of_top_flights <= 0:
-                psg.popup("Number of top flights must be greater than 0")
-                continue
+                value = psg.popup(
+                    "Number of top flights must be greater than 0", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if flight_ranking_values_obj.distance_score < 0:
-                psg.popup("Distance score multiplier cannot be negative")
-                continue
+                value = psg.popup(
+                    "Distance score multiplier cannot be negative", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if flight_ranking_values_obj.arr_time_multiplier < 0:
-                psg.popup("Arrival time score multiplier cannot be negative")
-                continue
+                value = psg.popup(
+                    "Arrival time score multiplier cannot be negative", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if flight_ranking_values_obj.dep_time_multiplier < 0:
-                psg.popup("Departure time score multiplier cannot be negative")
-                continue
+                value = psg.popup(
+                    "Departure time score multiplier cannot be negative", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if flight_ranking_values_obj.equipment_multiplier < 0:
-                psg.popup("Equipment score multiplier cannot be negative")
-                continue
+                value = psg.popup(
+                    "Equipment score multiplier cannot be negative", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if flight_ranking_values_obj.stop_over_score > 0:
-                psg.popup("Stop over score cannot be positive")
-                continue
+                value = psg.popup(
+                    "Stop over score cannot be positive", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             if (
                 pnr_ranking_values_obj.loyalties_pplatinum < 0
@@ -496,8 +520,10 @@ def initGUI() -> None:
                 or pnr_ranking_values_obj.eco_class_score < 0
                 or pnr_ranking_values_obj.premium_eco_class_score < 0
             ):
-                psg.popup("PNR ranking values cannot be negative")
-                continue
+                value = psg.popup(
+                    "PNR ranking values cannot be negative", button_type=psg.POPUP_BUTTONS_OK)
+                if value == "OK" or value == None:
+                    continue
 
             window.close()
             break
