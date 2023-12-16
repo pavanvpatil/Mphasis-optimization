@@ -113,6 +113,20 @@ def initGUI() -> None:
     layout.append([psg.Checkbox("Stop Over Score", default=True, key='stop_over_score_check', size=(30, 1), enable_events=True),
                    psg.Input("-20", key='stop_over_score', enable_events=True)])
 
+    layout.append(
+        [
+            psg.Text(
+                text="Mandatory Flight Configurations",
+                size=(None, 1),
+                justification="center",
+                font=("Helvetica", 15),
+                background_color="white",
+                text_color="black",
+                relief=psg.RELIEF_RIDGE,
+            )
+        ]
+    )
+
     layout.append([psg.Text("Maximum number of dowline flights", size=(
         32, 1), enable_events=True), psg.Input("3", key='max_downline_flights', enable_events=True)])
 

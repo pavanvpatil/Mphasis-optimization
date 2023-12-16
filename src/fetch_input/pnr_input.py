@@ -17,7 +17,13 @@ def get_pnr_passenger_input() -> dict[str, Passenger]:
     :return: dictionary of passengers with doc_id as key
     :rtype: dict[str, Passenger]
     '''
-    pnr_passenger_df = read_csv(pnr_passenger_file_path)
+
+    try:
+        pnr_passenger_df = read_csv(pnr_passenger_file_path)
+    except FileNotFoundError:
+        print("PNR passenger file not found")
+        exit(1)
+
     passenger_dict = {}
     for index, row in pnr_passenger_df.iterrows():
         cur_passenger = pnr_passenger_df.iloc[index].to_dict()
@@ -35,7 +41,13 @@ def get_pnr_booking_input() -> dict[str, Booking]:
     :return: dictionary of bookings with booking_key as key (generated using recloc, carrier_cd and flt_num)
     :rtype: dict[str, Booking]
     '''
-    pnr_booking_df = read_csv(pnr_booking_file_path)
+
+    try:
+        pnr_booking_df = read_csv(pnr_booking_file_path)
+    except FileNotFoundError:
+        print("PNR booking file not found")
+        exit(1)
+
     booking_dict = {}
     for index, row in pnr_booking_df.iterrows():
         cur_booking = pnr_booking_df.iloc[index].to_dict()

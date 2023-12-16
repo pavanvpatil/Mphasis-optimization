@@ -6,7 +6,11 @@ from src.classes.flight.airport_info import AirportInfo
 load_dotenv()
 airport_codes_file_path = os.getenv("AIRPORT_CODES_FILE_PATH")
 
-airport_codes_df = read_csv(airport_codes_file_path)
+try:
+    airport_codes_df = read_csv(airport_codes_file_path)
+except FileNotFoundError:
+    print("Airport codes file not found")
+    exit(1)
 
 
 def get_airport_city_codes() -> dict[str, str]:

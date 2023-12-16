@@ -18,7 +18,13 @@ def get_schedule() -> dict[str, Schedule]:
     :return: dictionary of schedules with ScheduleId as key
     :rtype: dict[str, Schedule]
     '''
-    schedule_df = read_csv(schedule_file_path)
+
+    try:
+        schedule_df = read_csv(schedule_file_path)
+    except FileNotFoundError:
+        print("Schedule file not found")
+        exit(1)
+
     schedule_dict = {}
     for index, row in schedule_df.iterrows():
         curr_schedule = schedule_df.iloc[index].to_dict()
@@ -34,7 +40,13 @@ def get_inventory() -> dict[str, Inventory]:
     :return: dictionary of inventories with InventoryId as key
     :rtype: dict[str, Inventory]
     '''
-    inv_df = read_csv(inventory_file_path)
+
+    try:
+        inv_df = read_csv(inventory_file_path)
+    except FileNotFoundError:
+        print("Inventory file not found")
+        exit(1)
+
     inv_dict = {}
     for index, row in inv_df.iterrows():
         curr_inv = inv_df.iloc[index].to_dict()

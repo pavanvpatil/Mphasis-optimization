@@ -138,9 +138,6 @@ def init_dfs(
         depth=0
     )
 
-    for path in all_paths:
-        print(len(path))
-
     return get_top_alternate_paths(
         inventory_id_affected=inventory_id_affected,
         all_paths=all_paths,
