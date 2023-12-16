@@ -9,14 +9,16 @@ def get_distance_from_airport_codes(airport_code1: str, airport_code2: str) -> f
     :return: the distance between the two airports in kilometers
     :rtype: float
     '''
-    
-    lat1 = airport_city_info_dict[airport_code1].lat
-    long1 = airport_city_info_dict[airport_code1].long
+    try:
+        lat1 = airport_city_info_dict[airport_code1].lat
+        long1 = airport_city_info_dict[airport_code1].long
 
-    lat2 = airport_city_info_dict[airport_code2].lat
-    long2 = airport_city_info_dict[airport_code2].long
+        lat2 = airport_city_info_dict[airport_code2].lat
+        long2 = airport_city_info_dict[airport_code2].long
 
-    return geopy_distance.geodesic((lat1, long1), (lat2, long2)).km
+        return geopy_distance.geodesic((lat1, long1), (lat2, long2)).km
+    except:
+        return float(200)
 
 
 

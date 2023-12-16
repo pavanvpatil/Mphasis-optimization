@@ -59,12 +59,26 @@ final_solutions: list[AffectedInventorySolution] = []
 
 for inventory_id in ranked_affected_inventories:
     # initialize dfs for this inventory and get top alternate paths
-    top_alternate_paths = init_dfs(inventory_id)
+    top_alternate_paths = init_dfs(inventory_id)        
 
     # get ranked affected passengers for this inventory sorted according to their passenger score
     ranked_affected_passengers_doc_ids = get_ranked_affected_passenger_doc_ids(
         inventory_id=inventory_id
     )
+
+    if len(top_alternate_paths) == 0:
+        # create solution object for this inventory and append to final solution list
+        current_final_solution = AffectedInventorySolution(
+            affected_inventory_id=inventory_id,
+            accomodated_passengers=[],
+            unaccomodated_passengers=ranked_affected_passengers_doc_ids,
+            default_solution=[],
+            other_solutions=[],
+        )
+
+        # append to final solution list
+        final_solutions.append(current_final_solution)
+        continue
 
     # solution list after accomodating passengers for this inventory in each of the top 3 alternate paths
     best_solutions = accomodate_passengers(
@@ -85,7 +99,7 @@ for inventory_id in ranked_affected_inventories:
         accomodated_passengers=best_solutions[0][0],
         unaccomodated_passengers=unaccomodated_passengers,
         default_solution=best_solutions[0][1],
-        other_solutions=[best_solutions[i][1] for i in range(1, len(best_solutions))],
+        other_solutions=[best_solutions[i][1] for i in range(1, len(best_solutions))] if len(best_solutions) > 1 else [],
     )
 
     # append to final solution list

@@ -9,7 +9,7 @@ load_dotenv()
 output_file_path = os.getenv("OUTPUT_FILE_PATH")
 
 
-def get_inventory_details(inventory_list: list[Inventory]):
+def get_inventory_details(inventory_list: list[Inventory]) -> list[dict]:
     """
     Get the inventory details from the inventory list
 
@@ -36,7 +36,7 @@ def get_inventory_details(inventory_list: list[Inventory]):
     return inventory_details
 
 
-def output_to_csv(final_solutions: list[AffectedInventorySolution]):
+def output_to_csv(final_solutions: list[AffectedInventorySolution]) -> None:
     """
     Output the final solutions in a CSV file
 
