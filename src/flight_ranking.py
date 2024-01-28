@@ -221,10 +221,19 @@ def flight_date_comparator(inv_id_1: Inventory, inv_id_2: Inventory) -> bool:
     date_time_depart_2 = datetime.strptime(
                 date_time_2, "%m/%d/%Y %H:%M")
 
+<<<<<<< Updated upstream
 '''
     Need to be tested
 '''
 def find_alternate_flight_on_day(inventory_obj: Inventory, date_dictionary: dict, schedule_dict: dict, inv_dict: dict) -> list[str]:
+=======
+def find_alternate_flight_on_day(inventory_obj: Inventory) -> list[str]:
+    '''
+    :param inventory_obj: Inventory class instance
+    :return: List of inventoryid strings
+    :rtype: List of strings
+    '''
+>>>>>>> Stashed changes
 
     affected_date_string = inventory_obj.departuredate
     print(affected_date_string)

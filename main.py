@@ -19,6 +19,7 @@ schedule_dict = get_schedule()
 
 date_dictionary = {}
 i = 0
+
 for inv_id in inv_dict:
     if i < 100:
         append_dict(inv_dict[inv_id], date_dictionary, schedule_dict, inv_dict)
